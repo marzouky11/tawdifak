@@ -17,7 +17,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { Separator } from '@/components/ui/separator';
-import { KeyRound, User, Mail, Phone, Camera, Lock } from 'lucide-react';
+import { KeyRound, User as UserIcon, Mail, Phone, Camera, Lock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { User } from '@/lib/types';
 import { updateUserProfile } from '@/lib/data';
@@ -257,7 +257,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-2 text-base md:text-lg"><User className="h-4 w-4" /> الاسم الكامل</FormLabel>
+                <FormLabel className="flex items-center gap-2 text-base md:text-lg"><UserIcon className="h-4 w-4" /> الاسم الكامل</FormLabel>
                 <FormControl>
                   <Input placeholder="اسمك الكامل" {...field} />
                 </FormControl>

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
-  Phone, MessageSquare, MapPin, CalendarDays, User as UserIcon, Award, Clock,
+  Phone, MessageSquare, MapPin, CalendarDays, User as UserIcon, Clock,
   Instagram, GraduationCap, Mail, LayoutGrid, FileText, Bookmark, Share2, FileSignature
 } from 'lucide-react';
 import type { Job, WorkType } from '@/lib/types';
@@ -123,8 +123,7 @@ export function WorkerDesktopDetails({ job }: WorkerDesktopDetailsProps) {
     const descriptionSection = job.description ? { id: 'description', icon: FileText, title: "وصف المهارات والخبرة", content: <FormattedText text={job.description} /> } : null;
 
     const allOtherSections = [
-        job.qualifications && { id: 'qualifications', icon: GraduationCap, title: "الشهادات والمؤهلات", content: <FormattedText text={job.qualifications} /> },
-        job.experience && { id: 'experience', icon: Award, title: "الخبرة", content: <FormattedText text={job.experience} /> }
+        job.qualifications && { id: 'qualifications', icon: GraduationCap, title: "الشهادات والمؤهلات", content: <FormattedText text={job.qualifications} /> }
     ].filter(Boolean) as { id: string; icon: React.ElementType; title: string; content: React.ReactNode; }[];
 
     return (

@@ -164,11 +164,15 @@ function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) 
           <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">آراؤكم هي مصدر إلهامنا ووقودنا للتطور المستمر.</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-5xl mx-auto">  
+        <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-8">  
             {testimonials.map((testimonial, index) => (  
               <div  
                 key={testimonial.id}  
-                className={cn(index >= 1 && 'hidden sm:block', index >= 2 && 'hidden')}
+                className={cn(
+                  'w-full sm:w-[380px]',
+                  index >= 1 && 'hidden sm:block',
+                  index >= 2 && 'hidden'
+                )}
               >  
                 <TestimonialCard testimonial={testimonial} />  
               </div>  

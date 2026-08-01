@@ -31,7 +31,7 @@ export default async function ImmigrationPage({ searchParams }: { searchParams: 
 
   return (
     <>
-      <MobilePageHeader title="فرص الهجرة" sticky={false}>
+      <MobilePageHeader title="فرص الهجرة" sticky={false} className="mb-3">
         <Plane className="h-5 w-5 text-primary" />
       </MobilePageHeader>
       <DesktopPageHeader

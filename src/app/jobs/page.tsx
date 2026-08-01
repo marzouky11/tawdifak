@@ -31,7 +31,7 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
 
   return (
     <>
-      <MobilePageHeader title="الوظائف" sticky={false}>
+      <MobilePageHeader title="الوظائف" sticky={false} className="mb-3">
         <Briefcase className="h-5 w-5 text-primary" />
       </MobilePageHeader>
       <DesktopPageHeader

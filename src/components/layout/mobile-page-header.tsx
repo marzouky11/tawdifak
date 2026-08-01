@@ -10,9 +10,10 @@ interface MobilePageHeaderProps {
   title: string;
   children?: React.ReactNode;
   sticky?: boolean;
+  className?: string;
 }
 
-export function MobilePageHeader({ title, children, sticky = true }: MobilePageHeaderProps) {
+export function MobilePageHeader({ title, children, sticky = true, className }: MobilePageHeaderProps) {
   const router = useRouter();
 
   const handleBack = () => {
@@ -22,8 +23,9 @@ export function MobilePageHeader({ title, children, sticky = true }: MobilePageH
   return (
     <div
       className={cn(
-        'md:hidden flex items-center gap-4 p-3.4 border-b bg-card mb-4',
-        sticky && 'sticky top-0 z-40'
+        'md:hidden flex items-center gap-4 p-3.4 border-b bg-card mb-6',
+        sticky && 'sticky top-0 z-40',
+        className
       )}
     >
       <Button variant="ghost" size="icon" className="h-10 w-10 shrink-0" onClick={handleBack}>

@@ -23,7 +23,7 @@ const InfoBadge = ({ icon, text, className }: { icon?: React.ElementType; text: 
   return (
     <Badge
       variant="secondary"
-      className={cn("inline-flex items-center gap-1.5 font-normal text-xs py-1 px-2 border flex-1 min-w-0", className)}
+      className={cn("inline-flex items-center gap-1.5 font-normal text-xs py-1 px-2 border flex-none max-w-[50%] min-w-0", className)}
     >
       {Icon && <Icon className="h-3.5 w-3.5 flex-shrink-0" />}
       <span className="truncate font-medium">{text}</span>
