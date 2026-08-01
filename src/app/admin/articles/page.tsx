@@ -110,12 +110,6 @@ export default function AdminArticlesPage() {
     }
   };
 
-  if (authLoading || loading) {
-    return (
-      <FullPageLoader />
-    );
-  }
-
   return (
     <>
       <MobilePageHeader title="إدارة المقالات">
@@ -126,6 +120,9 @@ export default function AdminArticlesPage() {
         title="إدارة المقالات"
         description="مراجعة وتعديل وحذف المقالات المنشورة في قاعدة البيانات."
       />
+      {authLoading || loading ? (
+        <FullPageLoader />
+      ) : (
       <div className="container mx-auto max-w-7xl px-4 pb-12 space-y-6">
         {articles.length > 0 ? (
           <>
@@ -198,6 +195,7 @@ export default function AdminArticlesPage() {
           </div>
         )}
       </div>
+      )}
 
       <AlertDialog open={!!articleToDelete} onOpenChange={(open) => !open && setArticleToDelete(null)}>
         <AlertDialogContent>

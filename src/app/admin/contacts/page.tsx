@@ -94,12 +94,6 @@ export default function AdminContactsPage() {
     return format(timestamp.toDate(), 'yyyy/MM/dd, h:mm a');
   };
 
-  if (authLoading || (loading && messages.length === 0)) {
-    return (
-        <FullPageLoader />
-    );
-  }
-
   return (
     <>
       <MobilePageHeader title="رسائل التواصل">
@@ -110,6 +104,9 @@ export default function AdminContactsPage() {
         title="رسائل التواصل"
         description="عرض وحذف الرسائل الواردة من صفحة اتصل بنا."
       />
+      {authLoading || (loading && messages.length === 0) ? (
+        <FullPageLoader />
+      ) : (
       <div className="container mx-auto max-w-6xl px-4 pb-12">
         {messages.length > 0 ? (
             <>
@@ -157,6 +154,7 @@ export default function AdminContactsPage() {
             </div>
         )}
       </div>
+      )}
 
        <AlertDialog open={!!messageToDelete} onOpenChange={(open) => !open && setMessageToDelete(null)}>
         <AlertDialogContent>

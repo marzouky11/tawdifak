@@ -31,12 +31,14 @@ export default async function CompetitionsPage({ searchParams }: { searchParams:
 
   return (
     <>
-      <MobilePageHeader title="المباريات العمومية" sticky={false} className="mb-3">
+      <MobilePageHeader title="المباريات العمومية"
+        className="pb-3" sticky={false} className="mb-3">
         <Landmark className="h-5 w-5 text-primary" />
       </MobilePageHeader>
       <DesktopPageHeader
         icon={Landmark}
         title="المباريات العمومية"
+        className="pb-3"
         description="تصفح أحدث إعلانات التوظيف والمباريات في القطاع العام."
       />
       <Suspense fallback={<div className="container"><CompetitionListSkeleton /></div>}>

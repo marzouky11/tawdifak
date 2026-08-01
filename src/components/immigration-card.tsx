@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Wallet, Users } from 'lucide-react';
 import type { ImmigrationPost } from '@/lib/types';
-import { cn, getProgramTypeDetails } from '@/lib/utils';
+import { cn, getGrowBadgeClass, getProgramTypeDetails } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { CategoryIcon } from './icons';
 import { Separator } from './ui/separator';
@@ -78,8 +78,8 @@ export function ImmigrationCard({ post }: ImmigrationCardProps) {
       <Separator />
 
       <CardContent className="p-4 pt-3 flex-grow flex flex-nowrap gap-2 justify-start items-start">
-        <InfoBadge icon={MapPin} text={`${post.targetCountry}${post.city ? ', ' + post.city : ''}`} className="bg-sky-100/60 dark:bg-sky-900/40 text-sky-700/80 dark:text-sky-300/80 border-sky-200/50 dark:border-sky-800/50"/>
-        {post.salary && <InfoBadge icon={Wallet} text={post.salary} className="bg-green-100/60 dark:bg-green-900/40 text-green-800/80 dark:text-green-200/80 border-green-200/50 dark:border-green-800/50" />}
+        <InfoBadge icon={MapPin} text={`${post.targetCountry}${post.city ? ', ' + post.city : ''}`} className={cn("bg-sky-100/60 dark:bg-sky-900/40 text-sky-700/80 dark:text-sky-300/80 border-sky-200/50 dark:border-sky-800/50", getGrowBadgeClass(`${post.targetCountry}${post.city ? ', ' + post.city : ''}`, post.salary))}/>
+        {post.salary && <InfoBadge icon={Wallet} text={post.salary} className={cn("bg-green-100/60 dark:bg-green-900/40 text-green-800/80 dark:text-green-200/80 border-green-200/50 dark:border-green-800/50", getGrowBadgeClass(post.salary, `${post.targetCountry}${post.city ? ', ' + post.city : ''}`))} />}
       </CardContent>
 
       <CardFooter className="p-4 pt-0 mt-auto bg-card flex items-center justify-between">

@@ -9,7 +9,7 @@ import { MapPin, Wallet, User as UserIcon } from 'lucide-react';
 import type { Job } from '@/lib/types';
 import { getCategoryById } from '@/lib/data';
 import { CategoryIcon } from '@/components/icons';
-import { cn } from '@/lib/utils';
+import { cn, getGrowBadgeClass } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from './ui/separator';
 import { UserAvatar } from './user-avatar';
@@ -90,12 +90,12 @@ export function JobCard({ job }: JobCardProps) {
             </div>
         </CardHeader>
         <Separator/>
-        <CardContent className="p-4 pt-3 flex-grow grid grid-cols-2 gap-x-4 gap-y-2">
-            <div className="flex items-center gap-1.5 text-muted-foreground text-sm overflow-hidden">
+        <CardContent className="p-4 pt-3 flex-grow flex flex-nowrap gap-4">
+            <div className={cn("flex items-center gap-1.5 text-muted-foreground text-sm overflow-hidden", getGrowBadgeClass(job.ownerName, `${job.country}, ${job.city}`))}>
               <UserIcon className="h-4 w-4 text-primary flex-shrink-0" />
               <span className="truncate">{job.ownerName}</span>
             </div>
-            <div className="flex items-center gap-1.5 text-muted-foreground text-sm overflow-hidden">
+            <div className={cn("flex items-center gap-1.5 text-muted-foreground text-sm overflow-hidden", getGrowBadgeClass(`${job.country}, ${job.city}`, job.ownerName))}>
               <MapPin className="h-4 w-4 text-primary flex-shrink-0" />
               <span className="truncate">{`${job.country}, ${job.city}`}</span>
             </div>
@@ -144,13 +144,13 @@ export function JobCard({ job }: JobCardProps) {
           <InfoBadge
               icon={MapPin}
               text={`${job.country}, ${job.city}`}
-              className="bg-blue-100/60 dark:bg-blue-900/40 text-blue-800/80 dark:text-blue-200/80 border-blue-200/50 dark:border-blue-800/50"
+              className={cn("bg-blue-100/60 dark:bg-blue-900/40 text-blue-800/80 dark:text-blue-200/80 border-blue-200/50 dark:border-blue-800/50", getGrowBadgeClass(`${job.country}, ${job.city}`, salaryText))}
           />
           {salaryText && (
               <InfoBadge 
                   icon={Wallet} 
                   text={salaryText} 
-                  className="bg-green-100/60 dark:bg-green-900/40 text-green-800/80 dark:text-green-200/80 border-green-200/50 dark:border-green-800/50"
+                  className={cn("bg-green-100/60 dark:bg-green-900/40 text-green-800/80 dark:text-green-200/80 border-green-200/50 dark:border-green-800/50", getGrowBadgeClass(salaryText, `${job.country}, ${job.city}`))}
               />
           )}
       </CardContent>

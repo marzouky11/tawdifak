@@ -37,6 +37,7 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
       <DesktopPageHeader
         icon={Briefcase}
         title="عروض العمل"
+        className="pb-3"
         description="تصفح أحدث عروض العمل المتاحة في مختلف المجالات والقطاعات."
       />
       <Suspense fallback={<div className="container"><JobListSkeleton /></div>}>

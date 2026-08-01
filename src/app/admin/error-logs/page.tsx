@@ -92,12 +92,6 @@ export default function AdminErrorLogsPage() {
     return format(timestamp.toDate(), 'yyyy/MM/dd, h:mm a');
   };
 
-  if (authLoading || (loading && logs.length === 0)) {
-    return (
-        <FullPageLoader />
-    );
-  }
-
   return (
     <>
       <MobilePageHeader title="سجل الأخطاء">
@@ -108,6 +102,9 @@ export default function AdminErrorLogsPage() {
         title="سجل الأخطاء"
         description="الأخطاء غير المتوقعة التي واجهها الزوار أثناء تصفح الموقع."
       />
+      {authLoading || (loading && logs.length === 0) ? (
+        <FullPageLoader />
+      ) : (
       <div className="container mx-auto max-w-7xl px-4 pb-12 space-y-6">
          {logs.length > 0 ? (
             <>
@@ -153,6 +150,7 @@ export default function AdminErrorLogsPage() {
             </div>
          )}
       </div>
+      )}
 
        <AlertDialog open={!!logToDelete} onOpenChange={(open) => !open && setLogToDelete(null)}>
         <AlertDialogContent>

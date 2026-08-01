@@ -49,12 +49,6 @@ export default function PostArticleClient() {
     }
   }, [articleId, isEditing, userData, router]);
 
-  if (authLoading || loading) {
-    return (
-      <FullPageLoader />
-    );
-  }
-
   return (
     <>
       <MobilePageHeader title={isEditing ? 'تعديل المقال' : 'نشر مقال جديد'}>
@@ -65,6 +59,9 @@ export default function PostArticleClient() {
         title={isEditing ? 'تعديل المقال' : 'نشر مقال جديد'}
         description={isEditing ? 'قم بتحديث محتوى المقال وتفاصيله.' : 'هذه الصفحة مخصصة للمشرفين فقط لنشر المقالات.'}
       />
+      {authLoading || loading ? (
+        <FullPageLoader />
+      ) : (
       <div className="container mx-auto max-w-3xl px-4 pb-12">
         <Card>
           <CardContent className="p-6 md:p-8">
@@ -78,6 +75,7 @@ export default function PostArticleClient() {
           </CardContent>
         </Card>
       </div>
+      )}
     </>
   );
 }

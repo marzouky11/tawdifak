@@ -11,7 +11,7 @@ interface DesktopPageHeaderProps {
 
 export function DesktopPageHeader({ icon: Icon, title, description, className }: DesktopPageHeaderProps) {
     return (
-        <div className={cn("hidden md:block container pt-6 pb-3", className)}>
+        <div className={cn("hidden md:block container pt-6 pb-6", className)}>
             <Card className="shadow-lg">
                 <CardHeader>
                     <div className="flex items-center gap-4">

@@ -85,12 +85,6 @@ export default function AdminManageImmigrationPage() {
     }
   };
 
-  if (authLoading || (loading && posts.length === 0)) {
-    return (
-      <FullPageLoader />
-    );
-  }
-
   return (
     <>
       <MobilePageHeader title="إدارة فرص الهجرة">
@@ -101,6 +95,9 @@ export default function AdminManageImmigrationPage() {
         title="إدارة فرص الهجرة"
         description="مراجعة وتعديل وحذف إعلانات فرص الهجرة المنشورة في المنصة."
       />
+      {authLoading || (loading && posts.length === 0) ? (
+        <FullPageLoader />
+      ) : (
       <div className="flex-grow container mx-auto max-w-7xl px-4 pb-12">
         <Card>
           <CardContent className="pt-6 space-y-6">
@@ -113,6 +110,7 @@ export default function AdminManageImmigrationPage() {
           </CardContent>
         </Card>
       </div>
+      )}
 
       <AlertDialog open={!!postToDelete} onOpenChange={(open) => !open && setPostToDelete(null)}>
         <AlertDialogContent>

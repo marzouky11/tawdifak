@@ -106,12 +106,6 @@ export default function AdminTestimonialsPage() {
     }
   };
 
-  if (authLoading || loading) {
-    return (
-      <FullPageLoader />
-    );
-  }
-
   return (
     <>
       <MobilePageHeader title="إدارة الآراء">
@@ -122,6 +116,9 @@ export default function AdminTestimonialsPage() {
         title="إدارة آراء المستخدمين"
         description="مراجعة وحذف الآراء المنشورة على المنصة."
       />
+      {authLoading || loading ? (
+        <FullPageLoader />
+      ) : (
       <div className="container mx-auto max-w-7xl px-4 pb-12 space-y-6">
         {testimonials.length > 0 ? (
           <>
@@ -168,6 +165,7 @@ export default function AdminTestimonialsPage() {
           </div>
         )}
       </div>
+      )}
 
       <AlertDialog open={!!testimonialToDelete} onOpenChange={(open) => !open && setTestimonialToDelete(null)}>
         <AlertDialogContent>

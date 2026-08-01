@@ -6,6 +6,21 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function getGrowBadgeClass(text: string | number | undefined | null, siblingText: string | number | undefined | null, threshold: number = 14): string {
+  const len = text !== undefined && text !== null ? String(text).length : 0;
+  const siblingLen = siblingText !== undefined && siblingText !== null ? String(siblingText).length : 0;
+  const isShort = len > 0 && len <= threshold;
+  const siblingIsShort = siblingLen <= threshold;
+
+  // Only let this badge grow to fill the card's width when its sibling is
+  // short (or absent) AND this one isn't itself short — otherwise keep the
+  // normal compact, capped-at-50% look so two short/long badges don't look odd.
+  if (siblingIsShort && !isShort) {
+    return 'flex-1 max-w-full min-w-0';
+  }
+  return 'flex-none max-w-[50%] min-w-0';
+}
+
 export function getInitials(name: string | undefined): string {
   if (!name) return '';
   const nameParts = name.trim().split(/\s+/).filter(Boolean);

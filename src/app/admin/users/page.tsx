@@ -127,12 +127,6 @@ export default function AdminUsersPage() {
     }
   }
 
-  if (authLoading || loading) {
-    return (
-        <FullPageLoader />
-    );
-  }
-
   return (
     <>
       <MobilePageHeader title="إدارة المستخدمين">
@@ -143,6 +137,9 @@ export default function AdminUsersPage() {
         title="إدارة المستخدمين"
         description="عرض وحذف المستخدمين المسجلين في المنصة."
       />
+      {authLoading || loading ? (
+        <FullPageLoader />
+      ) : (
       <div className="container mx-auto max-w-7xl px-4 pb-12">
         <Card>
           <CardHeader>
@@ -222,6 +219,7 @@ export default function AdminUsersPage() {
           </CardContent>
         </Card>
       </div>
+      )}
 
        <AlertDialog open={!!userToDelete} onOpenChange={(open) => !open && setUserToDelete(null)}>
         <AlertDialogContent>

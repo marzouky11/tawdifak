@@ -85,12 +85,6 @@ export default function AdminManageSeekersPage() {
     }
   };
 
-  if (authLoading || (loading && seekers.length === 0)) {
-    return (
-      <FullPageLoader />
-    );
-  }
-
   return (
     <>
       <MobilePageHeader title="إدارة الباحثين عن عمل">
@@ -101,6 +95,9 @@ export default function AdminManageSeekersPage() {
         title="إدارة الباحثين عن عمل"
         description="مراجعة وحذف إعلانات الباحثين عن عمل المنشورة في المنصة."
       />
+      {authLoading || (loading && seekers.length === 0) ? (
+        <FullPageLoader />
+      ) : (
       <div className="flex-grow container mx-auto max-w-7xl px-4 pb-12">
         <Card>
           <CardContent className="pt-6 space-y-6">
@@ -118,6 +115,7 @@ export default function AdminManageSeekersPage() {
           </CardContent>
         </Card>
       </div>
+      )}
 
       <AlertDialog open={!!adToDelete} onOpenChange={(open) => !open && setAdToDelete(null)}>
         <AlertDialogContent>

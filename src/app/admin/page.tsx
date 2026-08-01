@@ -42,12 +42,6 @@ export default function AdminDashboardPage() {
     }
   }, [userData, loading, router]);
 
-  if (loading || !userData?.isAdmin) {
-    return (
-      <FullPageLoader />
-    );
-  }
-
   return (
     <>
       <MobilePageHeader title="لوحة مشرف">
@@ -58,6 +52,9 @@ export default function AdminDashboardPage() {
         title="لوحة مشرف"
         description="جميع أدوات النشر والإدارة مجمعة في مكان واحد."
       />
+      {loading || !userData?.isAdmin ? (
+        <FullPageLoader />
+      ) : (
       <div className="container mx-auto max-w-6xl px-4 pb-12 grid grid-cols-1 gap-6 items-start">
         <Card>
           <CardHeader>
@@ -168,6 +165,7 @@ export default function AdminDashboardPage() {
           </CardContent>
         </Card>
       </div>
+      )}
     </>
   );
 }

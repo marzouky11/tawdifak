@@ -37,6 +37,7 @@ export default async function ImmigrationPage({ searchParams }: { searchParams: 
       <DesktopPageHeader
         icon={Plane}
         title="فرص الهجرة حول العالم"
+        className="pb-3"
         description="استكشف أحدث إعلانات الهجرة للعمل، الدراسة، أو التدريب في مختلف الدول."
       />
       <Suspense fallback={<div className="container"><ImmigrationListSkeleton /></div>}>

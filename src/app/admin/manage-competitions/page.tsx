@@ -85,12 +85,6 @@ export default function AdminManageCompetitionsPage() {
     }
   };
 
-  if (authLoading || (loading && competitions.length === 0)) {
-    return (
-      <FullPageLoader />
-    );
-  }
-
   return (
     <>
       <MobilePageHeader title="إدارة المباريات العمومية">
@@ -101,6 +95,9 @@ export default function AdminManageCompetitionsPage() {
         title="إدارة المباريات العمومية"
         description="مراجعة وتعديل وحذف إعلانات المباريات العمومية المنشورة في المنصة."
       />
+      {authLoading || (loading && competitions.length === 0) ? (
+        <FullPageLoader />
+      ) : (
       <div className="flex-grow container mx-auto max-w-7xl px-4 pb-12">
         <Card>
           <CardContent className="pt-6 space-y-6">
@@ -113,6 +110,7 @@ export default function AdminManageCompetitionsPage() {
           </CardContent>
         </Card>
       </div>
+      )}
 
       <AlertDialog open={!!compToDelete} onOpenChange={(open) => !open && setCompToDelete(null)}>
         <AlertDialogContent>

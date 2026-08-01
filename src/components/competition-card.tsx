@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, MapPin } from 'lucide-react';
 import type { Competition } from '@/lib/types';
-import { cn } from '@/lib/utils';
+import { cn, getGrowBadgeClass } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getOrganizerByName } from '@/lib/data';
 import { CategoryIcon } from './icons';
@@ -86,14 +86,14 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
                   icon={MapPin}
                   text={competition.location}
                   variant="secondary"
-                  className="bg-green-100/60 dark:bg-green-900/40 text-green-800/80 dark:text-green-200/80 border-green-200/50 dark:border-green-800/50"
+                  className={cn("bg-green-100/60 dark:bg-green-900/40 text-green-800/80 dark:text-green-200/80 border-green-200/50 dark:border-green-800/50", getGrowBadgeClass(competition.location, `آخر أجل: ${competition.deadline}`))}
               />
           )}
           <InfoBadge
               icon={Calendar}
               text={`آخر أجل: ${competition.deadline}`}
               variant="secondary"
-              className="bg-red-100/60 dark:bg-red-900/40 text-red-800/80 dark:text-red-200/80 border-red-200/50 dark:border-red-800/50"
+              className={cn("bg-red-100/60 dark:bg-red-900/40 text-red-800/80 dark:text-red-200/80 border-red-200/50 dark:border-red-800/50", getGrowBadgeClass(`آخر أجل: ${competition.deadline}`, competition.location))}
           />
       </CardContent>
 

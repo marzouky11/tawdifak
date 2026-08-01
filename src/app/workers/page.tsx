@@ -31,12 +31,14 @@ export default async function WorkersPage({ searchParams }: { searchParams: Prom
 
   return (
     <>
-      <MobilePageHeader title="باحثون عن عمل" sticky={false} className="mb-3">
+      <MobilePageHeader title="باحثون عن عمل"
+        className="pb-3" sticky={false} className="mb-3">
         <Users className="h-5 w-5 text-primary" />
       </MobilePageHeader>
       <DesktopPageHeader
         icon={Users}
         title="باحثون عن عمل"
+        className="pb-3"
         description="استعرض ملفات الباحثين عن عمل واعثر على الكفاءات التي تحتاجها."
       />
       <Suspense fallback={<div className="container"><WorkerListSkeleton/></div>}>

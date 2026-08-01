@@ -95,12 +95,6 @@ export default function AdminReportsPage() {
     return format(timestamp.toDate(), 'yyyy/MM/dd, h:mm a');
   };
 
-  if (authLoading || (loading && reports.length === 0)) {
-    return (
-        <FullPageLoader />
-    );
-  }
-
   return (
     <>
       <MobilePageHeader title="إدارة البلاغات">
@@ -111,6 +105,9 @@ export default function AdminReportsPage() {
         title="إدارة البلاغات"
         description="مراجعة وحذف بلاغات المستخدمين حول الإعلانات المخالفة."
       />
+      {authLoading || (loading && reports.length === 0) ? (
+        <FullPageLoader />
+      ) : (
       <div className="container mx-auto max-w-4xl px-4 pb-12 space-y-6">
          {reports.length > 0 ? (
             <>
@@ -157,6 +154,7 @@ export default function AdminReportsPage() {
             </div>
          )}
       </div>
+      )}
 
        <AlertDialog open={!!reportToDelete} onOpenChange={(open) => !open && setReportToDelete(null)}>
         <AlertDialogContent>
