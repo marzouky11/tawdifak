@@ -9,7 +9,7 @@ import { MapPin, Wallet, User as UserIcon } from 'lucide-react';
 import type { Job } from '@/lib/types';
 import { getCategoryById } from '@/lib/data';
 import { CategoryIcon } from '@/components/icons';
-import { cn, getGrowBadgeClass } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from './ui/separator';
 import { UserAvatar } from './user-avatar';
@@ -19,16 +19,14 @@ interface JobCardProps {
   job: Job | null;
 }
 
-const InfoBadge = ({ icon, text, className, wrapperClassName }: { icon?: React.ElementType, text: string | number | undefined, className?: string, wrapperClassName?: string }) => {
+const InfoBadge = ({ icon, text, className }: { icon?: React.ElementType, text: string | number | undefined, className?: string }) => {
   if (!text) return null;
   const Icon = icon;
   return (
-    <div className={cn("flex min-w-0", wrapperClassName)}>
-      <Badge variant="secondary" className={cn("inline-flex items-center gap-1.5 font-normal text-xs py-1 px-2 border w-fit max-w-full min-w-0", className)}>
-        {Icon && <Icon className="h-3.5 w-3.5 flex-shrink-0" />}
-        <span className="truncate font-medium">{text}</span>
-      </Badge>
-    </div>
+    <Badge variant="secondary" className={cn("inline-flex items-center gap-1.5 font-normal text-xs py-1 px-2 border w-fit max-w-full min-w-0", className)}>
+      {Icon && <Icon className="h-3.5 w-3.5 flex-shrink-0" />}
+      <span className="truncate font-medium">{text}</span>
+    </Badge>
   );
 };
 
@@ -92,12 +90,12 @@ export function JobCard({ job }: JobCardProps) {
             </div>
         </CardHeader>
         <Separator/>
-        <CardContent className="p-4 pt-3 flex-grow flex flex-nowrap gap-4">
-            <div className={cn("flex items-center gap-1.5 text-muted-foreground text-sm overflow-hidden", getGrowBadgeClass(job.ownerName, `${job.country}, ${job.city}`))}>
+        <CardContent className="p-4 pt-3 flex-grow flex flex-wrap gap-x-4 gap-y-1">
+            <div className="flex items-center gap-1.5 text-muted-foreground text-sm overflow-hidden min-w-0">
               <UserIcon className="h-4 w-4 text-primary flex-shrink-0" />
               <span className="truncate">{job.ownerName}</span>
             </div>
-            <div className={cn("flex items-center gap-1.5 text-muted-foreground text-sm overflow-hidden", getGrowBadgeClass(`${job.country}, ${job.city}`, job.ownerName))}>
+            <div className="flex items-center gap-1.5 text-muted-foreground text-sm overflow-hidden min-w-0">
               <MapPin className="h-4 w-4 text-primary flex-shrink-0" />
               <span className="truncate">{`${job.country}, ${job.city}`}</span>
             </div>
@@ -142,19 +140,17 @@ export function JobCard({ job }: JobCardProps) {
       
       <Separator />
 
-      <CardContent className="p-4 flex-grow flex flex-nowrap gap-2 justify-start items-start">
+      <CardContent className="p-4 flex-grow flex flex-wrap gap-2 justify-start items-start">
           <InfoBadge
               icon={MapPin}
               text={`${job.country}, ${job.city}`}
               className="bg-blue-100/60 dark:bg-blue-900/40 text-blue-800/80 dark:text-blue-200/80 border-blue-200/50 dark:border-blue-800/50"
-              wrapperClassName={getGrowBadgeClass(`${job.country}, ${job.city}`, salaryText)}
           />
           {salaryText && (
               <InfoBadge 
                   icon={Wallet} 
                   text={salaryText} 
                   className="bg-green-100/60 dark:bg-green-900/40 text-green-800/80 dark:text-green-200/80 border-green-200/50 dark:border-green-800/50"
-                  wrapperClassName={getGrowBadgeClass(salaryText, `${job.country}, ${job.city}`)}
               />
           )}
       </CardContent>

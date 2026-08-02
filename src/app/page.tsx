@@ -187,7 +187,7 @@ export default async function HomePage() {
       <h1 className="sr-only">{appName} - أحدث الوظائف بالمغرب وفرص الهجرة حول العالم</h1>
       <HomeHeaderMobile />
 
-      <div className="container mt-4">
+      <div className="container mt-4 md:mt-6">
         <Suspense fallback={<JobFiltersSkeleton />}>
           <HomePageFilters />
         </Suspense>
