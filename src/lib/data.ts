@@ -1609,7 +1609,7 @@ export const getCachedHomePageSeekers = unstable_cache(
 
 export const getCachedHomePageTestimonials = unstable_cache(
   async () => {
-    return getTestimonials({ limit: 4 });
+    return getTestimonials({ limit: 2 });
   },
   ['home-testimonials'], 
   { tags: ['testimonials'], revalidate: 3600 }

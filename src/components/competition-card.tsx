@@ -18,14 +18,16 @@ interface CompetitionCardProps {
   competition: Competition | null;
 }
 
-const InfoBadge = ({ icon, text, variant, className, textColor }: { icon?: React.ElementType, text: string | number | undefined, variant: "secondary" | "destructive" | "accent" | "default", className?: string, textColor?: string }) => {
+const InfoBadge = ({ icon, text, variant, className, textColor, wrapperClassName }: { icon?: React.ElementType, text: string | number | undefined, variant: "secondary" | "destructive" | "accent" | "default", className?: string, textColor?: string, wrapperClassName?: string }) => {
   if (!text) return null;
   const Icon = icon;
   return (
-    <Badge variant={variant} className={cn("inline-flex items-center gap-1.5 font-normal text-xs py-1 px-2 border flex-none max-w-[50%] min-w-0", className)}>
-      {Icon && <Icon className="h-3.5 w-3.5 flex-shrink-0" />}
-      <span className={cn("truncate font-medium", textColor)}>{text}</span>
-    </Badge>
+    <div className={cn("flex min-w-0", wrapperClassName)}>
+      <Badge variant={variant} className={cn("inline-flex items-center gap-1.5 font-normal text-xs py-1 px-2 border w-fit max-w-full min-w-0", className)}>
+        {Icon && <Icon className="h-3.5 w-3.5 flex-shrink-0" />}
+        <span className={cn("truncate font-medium", textColor)}>{text}</span>
+      </Badge>
+    </div>
   );
 };
 
@@ -86,14 +88,16 @@ export function CompetitionCard({ competition }: CompetitionCardProps) {
                   icon={MapPin}
                   text={competition.location}
                   variant="secondary"
-                  className={cn("bg-green-100/60 dark:bg-green-900/40 text-green-800/80 dark:text-green-200/80 border-green-200/50 dark:border-green-800/50", getGrowBadgeClass(competition.location, `آخر أجل: ${competition.deadline}`))}
+                  className="bg-green-100/60 dark:bg-green-900/40 text-green-800/80 dark:text-green-200/80 border-green-200/50 dark:border-green-800/50"
+                  wrapperClassName={getGrowBadgeClass(competition.location, `آخر أجل: ${competition.deadline}`)}
               />
           )}
           <InfoBadge
               icon={Calendar}
               text={`آخر أجل: ${competition.deadline}`}
               variant="secondary"
-              className={cn("bg-red-100/60 dark:bg-red-900/40 text-red-800/80 dark:text-red-200/80 border-red-200/50 dark:border-red-800/50", getGrowBadgeClass(`آخر أجل: ${competition.deadline}`, competition.location))}
+              className="bg-red-100/60 dark:bg-red-900/40 text-red-800/80 dark:text-red-200/80 border-red-200/50 dark:border-red-800/50"
+              wrapperClassName={getGrowBadgeClass(`آخر أجل: ${competition.deadline}`, competition.location)}
           />
       </CardContent>
 

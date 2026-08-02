@@ -170,7 +170,8 @@ function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) 
                 key={testimonial.id}  
                 className={cn(
                   'w-full sm:w-[380px]',
-                  index >= 1 && 'hidden sm:block',
+                  index === 0 && 'block',
+                  index === 1 && 'hidden sm:block',
                   index >= 2 && 'hidden'
                 )}
               >  

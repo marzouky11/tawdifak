@@ -19,14 +19,16 @@ interface JobCardProps {
   job: Job | null;
 }
 
-const InfoBadge = ({ icon, text, className }: { icon?: React.ElementType, text: string | number | undefined, className?: string }) => {
+const InfoBadge = ({ icon, text, className, wrapperClassName }: { icon?: React.ElementType, text: string | number | undefined, className?: string, wrapperClassName?: string }) => {
   if (!text) return null;
   const Icon = icon;
   return (
-    <Badge variant="secondary" className={cn("inline-flex items-center gap-1.5 font-normal text-xs py-1 px-2 border flex-none max-w-[50%] min-w-0", className)}>
-      {Icon && <Icon className="h-3.5 w-3.5 flex-shrink-0" />}
-      <span className="truncate font-medium">{text}</span>
-    </Badge>
+    <div className={cn("flex min-w-0", wrapperClassName)}>
+      <Badge variant="secondary" className={cn("inline-flex items-center gap-1.5 font-normal text-xs py-1 px-2 border w-fit max-w-full min-w-0", className)}>
+        {Icon && <Icon className="h-3.5 w-3.5 flex-shrink-0" />}
+        <span className="truncate font-medium">{text}</span>
+      </Badge>
+    </div>
   );
 };
 
@@ -144,13 +146,15 @@ export function JobCard({ job }: JobCardProps) {
           <InfoBadge
               icon={MapPin}
               text={`${job.country}, ${job.city}`}
-              className={cn("bg-blue-100/60 dark:bg-blue-900/40 text-blue-800/80 dark:text-blue-200/80 border-blue-200/50 dark:border-blue-800/50", getGrowBadgeClass(`${job.country}, ${job.city}`, salaryText))}
+              className="bg-blue-100/60 dark:bg-blue-900/40 text-blue-800/80 dark:text-blue-200/80 border-blue-200/50 dark:border-blue-800/50"
+              wrapperClassName={getGrowBadgeClass(`${job.country}, ${job.city}`, salaryText)}
           />
           {salaryText && (
               <InfoBadge 
                   icon={Wallet} 
                   text={salaryText} 
-                  className={cn("bg-green-100/60 dark:bg-green-900/40 text-green-800/80 dark:text-green-200/80 border-green-200/50 dark:border-green-800/50", getGrowBadgeClass(salaryText, `${job.country}, ${job.city}`))}
+                  className="bg-green-100/60 dark:bg-green-900/40 text-green-800/80 dark:text-green-200/80 border-green-200/50 dark:border-green-800/50"
+                  wrapperClassName={getGrowBadgeClass(salaryText, `${job.country}, ${job.city}`)}
               />
           )}
       </CardContent>

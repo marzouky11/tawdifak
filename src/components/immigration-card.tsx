@@ -17,17 +17,19 @@ interface ImmigrationCardProps {
   post: ImmigrationPost | null;
 }
 
-const InfoBadge = ({ icon, text, className }: { icon?: React.ElementType; text: string | undefined; className?: string }) => {
+const InfoBadge = ({ icon, text, className, wrapperClassName }: { icon?: React.ElementType; text: string | undefined; className?: string; wrapperClassName?: string }) => {
   if (!text) return null;
   const Icon = icon;
   return (
-    <Badge
-      variant="secondary"
-      className={cn("inline-flex items-center gap-1.5 font-normal text-xs py-1 px-2 border flex-none max-w-[50%] min-w-0", className)}
-    >
-      {Icon && <Icon className="h-3.5 w-3.5 flex-shrink-0" />}
-      <span className="truncate font-medium">{text}</span>
-    </Badge>
+    <div className={cn("flex min-w-0", wrapperClassName)}>
+      <Badge
+        variant="secondary"
+        className={cn("inline-flex items-center gap-1.5 font-normal text-xs py-1 px-2 border w-fit max-w-full min-w-0", className)}
+      >
+        {Icon && <Icon className="h-3.5 w-3.5 flex-shrink-0" />}
+        <span className="truncate font-medium">{text}</span>
+      </Badge>
+    </div>
   );
 };
 
@@ -78,8 +80,8 @@ export function ImmigrationCard({ post }: ImmigrationCardProps) {
       <Separator />
 
       <CardContent className="p-4 pt-3 flex-grow flex flex-nowrap gap-2 justify-start items-start">
-        <InfoBadge icon={MapPin} text={`${post.targetCountry}${post.city ? ', ' + post.city : ''}`} className={cn("bg-sky-100/60 dark:bg-sky-900/40 text-sky-700/80 dark:text-sky-300/80 border-sky-200/50 dark:border-sky-800/50", getGrowBadgeClass(`${post.targetCountry}${post.city ? ', ' + post.city : ''}`, post.salary))}/>
-        {post.salary && <InfoBadge icon={Wallet} text={post.salary} className={cn("bg-green-100/60 dark:bg-green-900/40 text-green-800/80 dark:text-green-200/80 border-green-200/50 dark:border-green-800/50", getGrowBadgeClass(post.salary, `${post.targetCountry}${post.city ? ', ' + post.city : ''}`))} />}
+        <InfoBadge icon={MapPin} text={`${post.targetCountry}${post.city ? ', ' + post.city : ''}`} className="bg-sky-100/60 dark:bg-sky-900/40 text-sky-700/80 dark:text-sky-300/80 border-sky-200/50 dark:border-sky-800/50" wrapperClassName={getGrowBadgeClass(`${post.targetCountry}${post.city ? ', ' + post.city : ''}`, post.salary)}/>
+        {post.salary && <InfoBadge icon={Wallet} text={post.salary} className="bg-green-100/60 dark:bg-green-900/40 text-green-800/80 dark:text-green-200/80 border-green-200/50 dark:border-green-800/50" wrapperClassName={getGrowBadgeClass(post.salary, `${post.targetCountry}${post.city ? ', ' + post.city : ''}`)} />}
       </CardContent>
 
       <CardFooter className="p-4 pt-0 mt-auto bg-card flex items-center justify-between">
