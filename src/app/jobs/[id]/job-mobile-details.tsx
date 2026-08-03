@@ -137,8 +137,8 @@ export function JobMobileDetails({ job }: JobMobileDetailsProps) {
     return (
         <div className="container mx-auto max-w-7xl px-4 pb-12">
             <div className="space-y-6">
-                <Card className="overflow-hidden shadow-lg border-t-4" style={{ borderColor: sectionColor }}>
-                    <CardHeader className="bg-muted/30 p-4">
+                <Card className="overflow-hidden shadow-lg border-2" style={{ borderColor: sectionColor }}>
+                    <CardHeader className="p-4" style={{ backgroundColor: `${sectionColor}1A` }}>
                         <div className="flex items-center gap-3 mb-2">
                             <div className="p-2 rounded-xl flex-shrink-0" style={{ backgroundColor: `${categoryColor}1A` }}>
                                 <CategoryIcon name={finalIconName} className="h-6 w-6" style={{ color: categoryColor }} />
@@ -160,7 +160,7 @@ export function JobMobileDetails({ job }: JobMobileDetailsProps) {
                         <div className="grid grid-cols-2 gap-3">
                             <InfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={categoryColor} />
                             <InfoItem icon={Wallet} label="الأجر" value={job.salary ? job.salary : 'عند الطلب'} color={categoryColor} />
-                            {categoryName && <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={categoryColor} />}
+                            {categoryName && <InfoItem icon={LayoutGrid} label="مجال العمل" value={categoryName} color={categoryColor} />}
                             {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
                         {translatedContractType && <InfoItem icon={FileSignature} label="نوع العقد" value={translatedContractType} color={categoryColor} />}
                             {job.companyName && <InfoItem icon={Building2} label="الشركة" value={job.companyName} color={categoryColor} />}

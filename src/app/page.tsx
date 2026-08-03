@@ -51,16 +51,6 @@ function JobFiltersSkeleton() {
   );
 }
 
-function SectionSkeleton() {
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      {Array.from({ length: 4 }).map((_, i) => (
-        <JobCard key={i} job={null} />
-      ))}
-    </div>
-  );
-}
-
 interface SectionProps {
   icon: React.ElementType;
   title: string;
@@ -201,89 +191,81 @@ export default async function HomePage() {
 
           <Separator />
 
-          <Suspense fallback={<SectionSkeleton />}>
-            <Section
-              icon={Briefcase}
-              title="عروض العمل"
-              description="اكتشف آخر فرص الشغل التي أضافها أصحاب العمل في مختلف المجالات."
-              href="/jobs"
-              iconColor="#0D47A1"
-            >
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {data.jobOffers.map((job, index) => (
-                  <div key={job.id} className={cn(index >= 4 && 'hidden sm:block')}>
-                    <JobCard job={job} />
-                  </div>
-                ))}
-              </div>
-            </Section>
-          </Suspense>
+          <Section
+            icon={Briefcase}
+            title="عروض العمل"
+            description="اكتشف آخر فرص الشغل التي أضافها أصحاب العمل في مختلف المجالات."
+            href="/jobs"
+            iconColor="#0D47A1"
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {data.jobOffers.map((job, index) => (
+                <div key={job.id} className={cn(index >= 4 && 'hidden sm:block')}>
+                  <JobCard job={job} />
+                </div>
+              ))}
+            </div>
+          </Section>
 
           {data.immigrationPosts.length > 0 && (
             <>
               <Separator />
-              <Suspense fallback={<SectionSkeleton />}>
-                <Section
-                  icon={Plane}
-                  title="فرص الهجرة"
-                  description="اكتشف أحدث فرص الهجرة للعمل، الدراسة، أو التدريب حول العالم."
-                  href="/immigration"
-                  iconColor="#0ea5e9"
-                >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {data.immigrationPosts.map((post, index) => (
-                      <div key={post.id} className={cn(index >= 4 && 'hidden sm:block')}>
-                        <ImmigrationCard post={post} />
-                      </div>
-                    ))}
-                  </div>
-                </Section>
-              </Suspense>
+              <Section
+                icon={Plane}
+                title="فرص الهجرة"
+                description="اكتشف أحدث فرص الهجرة للعمل، الدراسة، أو التدريب حول العالم."
+                href="/immigration"
+                iconColor="#0ea5e9"
+              >
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {data.immigrationPosts.map((post, index) => (
+                    <div key={post.id} className={cn(index >= 4 && 'hidden sm:block')}>
+                      <ImmigrationCard post={post} />
+                    </div>
+                  ))}
+                </div>
+              </Section>
             </>
           )}
 
           {data.competitions.length > 0 && (
             <>
               <Separator />
-              <Suspense fallback={<SectionSkeleton />}>
-                <Section
-                  icon={Landmark}
-                  title="المباريات العمومية"
-                  description="تصفح آخر مباريات التوظيف في القطاع العام."
-                  href="/competitions"
-                  iconColor="#14532d"
-                >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {data.competitions.map((comp, index) => (
-                      <div key={comp.id} className={cn(index >= 2 && 'hidden sm:block', index >= 4 && 'lg:hidden')}>
-                        <CompetitionCard competition={comp} />
-                      </div>
-                    ))}
-                  </div>
-                </Section>
-              </Suspense>
+              <Section
+                icon={Landmark}
+                title="المباريات العمومية"
+                description="تصفح آخر مباريات التوظيف في القطاع العام."
+                href="/competitions"
+                iconColor="#14532d"
+              >
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {data.competitions.map((comp, index) => (
+                    <div key={comp.id} className={cn(index >= 2 && 'hidden sm:block', index >= 4 && 'lg:hidden')}>
+                      <CompetitionCard competition={comp} />
+                    </div>
+                  ))}
+                </div>
+              </Section>
             </>
           )}
 
           <Separator />
 
-          <Suspense fallback={<SectionSkeleton />}>
-            <Section
-              icon={Users}
-              title="باحثون عن عمل"
-              description="تصفح ملفات المرشحين والمهنيين المستعدين للانضمام إلى فريقك."
-              href="/workers"
-              iconColor="#424242"
-            >
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {data.jobSeekers.map((job, index) => (
-                  <div key={job.id} className={cn(index >= 2 && 'hidden sm:block', index >= 4 && 'lg:hidden')}>
-                    <JobCard job={job} />
-                  </div>
-                ))}
-              </div>
-            </Section>
-          </Suspense>
+          <Section
+            icon={Users}
+            title="باحثون عن عمل"
+            description="تصفح ملفات المرشحين والمهنيين المستعدين للانضمام إلى فريقك."
+            href="/workers"
+            iconColor="#424242"
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {data.jobSeekers.map((job, index) => (
+                <div key={job.id} className={cn(index >= 2 && 'hidden sm:block', index >= 4 && 'lg:hidden')}>
+                  <JobCard job={job} />
+                </div>
+              ))}
+            </div>
+          </Section>
 
           <Separator />
 
@@ -291,12 +273,10 @@ export default async function HomePage() {
 
           <Separator />
 
-          <Suspense>
-            <HomeExtraSections
-              testimonials={data.testimonials}
-              stats={data.stats}
-            />
-          </Suspense>
+          <HomeExtraSections
+            testimonials={data.testimonials}
+            stats={data.stats}
+          />
         </div>
       </div>
     </>

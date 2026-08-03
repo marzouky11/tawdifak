@@ -49,12 +49,6 @@ export default function EditCompetitionPage() {
     }
   }, [params.id, userData, router]);
 
-  if (authLoading || loading || !userData?.isAdmin) {
-    return (
-        <FullPageLoader />
-    );
-  }
-
   return (
     <>
       <MobilePageHeader title="تعديل المباراة">
@@ -65,6 +59,9 @@ export default function EditCompetitionPage() {
         title="تعديل المباراة العمومية"
         description="قم بتحديث معلومات المباراة لضمان دقتها."
       />
+      {authLoading || loading || !userData?.isAdmin ? (
+        <FullPageLoader />
+      ) : (
       <div className="flex-grow">
         <div className="container mx-auto max-w-3xl px-4 pb-12">
           <Card>
@@ -82,6 +79,7 @@ export default function EditCompetitionPage() {
           </Card>
         </div>
       </div>
+      )}
     </>
   );
 }

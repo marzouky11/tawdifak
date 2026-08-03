@@ -118,7 +118,6 @@ export function EditCompetitionForm({ competition }: EditCompetitionFormProps) {
         description: "تم حفظ التغييرات على المباراة.",
       });
       router.push(`/competitions/${competition.id}`);
-      router.refresh();
       
     } catch (error) {
       console.error("Failed to update competition:", error);

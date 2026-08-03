@@ -26,12 +26,6 @@ export default function PostImmigrationPage() {
     }
   }, [user, userData, loading, router]);
   
-  if (loading || !userData?.isAdmin) {
-    return (
-        <FullPageLoader />
-    );
-  }
-
   return (
     <>
       <MobilePageHeader title="نشر إعلان هجرة">
@@ -42,6 +36,9 @@ export default function PostImmigrationPage() {
         title="نشر فرصة هجرة جديدة"
         description="هذه الصفحة مخصصة للمشرفين فقط لنشر إعلانات الهجرة والعمل بالخارج."
       />
+      {loading || !userData?.isAdmin ? (
+        <FullPageLoader />
+      ) : (
       <div className="container mx-auto max-w-3xl px-4 pb-12">
         <Card>
           <CardContent className="p-0">
@@ -49,6 +46,7 @@ export default function PostImmigrationPage() {
           </CardContent>
         </Card>
       </div>
+      )}
     </>
   );
 }

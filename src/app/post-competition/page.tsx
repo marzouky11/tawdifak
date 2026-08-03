@@ -27,12 +27,6 @@ export default function PostCompetitionPage() {
     }
   }, [user, userData, loading, router]);
   
-  if (loading || !userData?.isAdmin) {
-    return (
-        <FullPageLoader />
-    );
-  }
-
   return (
     <>
       <MobilePageHeader title="نشر مباراة عمومية">
@@ -43,6 +37,9 @@ export default function PostCompetitionPage() {
         title="نشر مباراة عمومية جديدة"
         description="هذه الصفحة مخصصة للمشرفين فقط لنشر إعلانات المباريات."
       />
+      {loading || !userData?.isAdmin ? (
+        <FullPageLoader />
+      ) : (
       <div className="container mx-auto max-w-3xl px-4 pb-12">
         <Card>
           <CardContent className="p-0">
@@ -50,6 +47,7 @@ export default function PostCompetitionPage() {
           </CardContent>
         </Card>
       </div>
+      )}
     </>
   );
 }

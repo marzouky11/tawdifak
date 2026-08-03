@@ -25,12 +25,6 @@ export default function AddTestimonialPage() {
     }
   }, [user, loading, router]);
 
-  if (loading || !user) {
-    return (
-        <FullPageLoader />
-    );
-  }
-
   return (
     <>
       <MobilePageHeader title="إضافة رأي">
@@ -41,6 +35,9 @@ export default function AddTestimonialPage() {
         title="شاركنا رأيك"
         description="نحن نقدر رأيك كثيرًا. ملاحظاتك تساعدنا على تحسين المنصة وتطويرها."
       />
+      {loading || !user ? (
+        <FullPageLoader />
+      ) : (
       <div className="container mx-auto max-w-2xl px-4 pb-12">
         <Card>
           <CardContent className="pt-6">
@@ -48,6 +45,7 @@ export default function AddTestimonialPage() {
           </CardContent>
         </Card>
       </div>
+      )}
     </>
   );
 }

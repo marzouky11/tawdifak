@@ -44,12 +44,6 @@ export default function SelectPostTypePage() {
     router.push('/post-job?type=seeking_job');
   };
 
-  if (loading) {
-    return (
-        <FullPageLoader />
-    );
-  }
-
   return (
     <>
       <MobilePageHeader title="نشر إعلان جديد">
@@ -60,6 +54,9 @@ export default function SelectPostTypePage() {
         title="نشر إعلان جديد"
         description="اضغط على البطاقة أدناه لإنشاء إعلانك كباحث عن عمل."
       />
+      {loading ? (
+        <FullPageLoader />
+      ) : (
       <div className="container mx-auto max-w-7xl px-4 pb-12">
         {!user && (
           <Alert className="mb-6 border-primary/50 text-primary text-center">
@@ -80,6 +77,7 @@ export default function SelectPostTypePage() {
           />
         </div>
       </div>
+      )}
     </>
   );
 }

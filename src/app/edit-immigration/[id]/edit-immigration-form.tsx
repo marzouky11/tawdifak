@@ -147,7 +147,6 @@ export function EditImmigrationForm({ post }: EditImmigrationFormProps) {
       await revalidateAll([`imm-${post.id}`]);
       toast({ title: "تم تحديث الإعلان بنجاح!" });
       router.push(`/immigration/${post.id}`);
-      router.refresh();
 
     } catch (error) {
       console.error("Failed to process immigration post:", error);

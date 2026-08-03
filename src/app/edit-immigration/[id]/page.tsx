@@ -49,12 +49,6 @@ export default function EditImmigrationPage() {
     }
   }, [params.id, userData, router]);
 
-  if (authLoading || loading || !userData?.isAdmin) {
-    return (
-        <FullPageLoader />
-    );
-  }
-
   return (
     <>
       <MobilePageHeader title="تعديل إعلان الهجرة">
@@ -65,6 +59,9 @@ export default function EditImmigrationPage() {
         title="تعديل إعلان الهجرة"
         description="قم بتحديث معلومات فرصة الهجرة لضمان دقتها."
       />
+      {authLoading || loading || !userData?.isAdmin ? (
+        <FullPageLoader />
+      ) : (
       <div className="flex-grow">
         <div className="container mx-auto max-w-3xl px-4 pb-12">
           <Card>
@@ -82,6 +79,7 @@ export default function EditImmigrationPage() {
           </Card>
         </div>
       </div>
+      )}
     </>
   );
 }

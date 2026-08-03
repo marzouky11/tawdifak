@@ -115,7 +115,7 @@ export function CompetitionDesktopDetails({ competition }: CompetitionDesktopDet
     return (
         <div className="container mx-auto max-w-5xl px-4 pb-12 space-y-6">
             <Card className="overflow-hidden shadow-lg border-2 border-dashed" style={{borderColor: sectionColor}}>
-                 <CardHeader className="bg-muted/30 p-6">
+                 <CardHeader className="p-6" style={{ backgroundColor: `${sectionColor}1A` }}>
                      <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                         <div className="flex-grow">
                             <div className="flex items-center gap-4 mb-2">

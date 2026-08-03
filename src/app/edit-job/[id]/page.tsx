@@ -53,12 +53,6 @@ export default function EditJobPage() {
 
   const categories = getCategories();
 
-  if (authLoading || loading) {
-    return (
-        <FullPageLoader />
-    );
-  }
-
   return (
     <>
       <MobilePageHeader title="تعديل الإعلان">
@@ -69,6 +63,9 @@ export default function EditJobPage() {
         title="تعديل الإعلان"
         description="قم بتحديث معلومات إعلانك لضمان وصوله للشخص المناسب."
       />
+      {authLoading || loading ? (
+        <FullPageLoader />
+      ) : (
       <div className="flex-grow">
         <div className="container mx-auto max-w-3xl px-4 pb-12">
           <Card>
@@ -89,6 +86,7 @@ export default function EditJobPage() {
           </Card>
         </div>
       </div>
+      )}
     </>
   );
 }

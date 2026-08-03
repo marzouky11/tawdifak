@@ -142,8 +142,8 @@ export function WorkerMobileDetails({ job }: WorkerMobileDetailsProps) {
                         </div>
                          <div className="grid grid-cols-2 gap-3">
                             <InfoItem icon={UserIcon} label="صاحب الإعلان" value={job.ownerName} color={primaryColor} />
-                            {categoryName && <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={primaryColor} />}
                             <InfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={primaryColor} />
+                            {categoryName && <InfoItem icon={LayoutGrid} label="مجال العمل" value={categoryName} color={primaryColor} />}
                             {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={primaryColor} />}
                         {translatedContractType && <InfoItem icon={FileSignature} label="نوع العقد" value={translatedContractType} color={primaryColor} />}
                         </div>

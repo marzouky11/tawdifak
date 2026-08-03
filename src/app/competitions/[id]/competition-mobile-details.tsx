@@ -111,7 +111,7 @@ export function CompetitionMobileDetails({ competition }: CompetitionMobileDetai
     return (
         <div className="container mx-auto max-w-7xl px-4 pb-12 space-y-6">
             <Card className="overflow-hidden shadow-lg border-2 border-dashed" style={{borderColor: sectionColor}}>
-                 <CardHeader className="bg-muted/30 p-4">
+                 <CardHeader className="p-4" style={{ backgroundColor: `${sectionColor}1A` }}>
                     <div className="flex items-center gap-4 mb-2">
                         <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${organizerColor}1A` }}>
                             <CategoryIcon name={organizerIcon} className="w-8 h-8" style={{ color: organizerColor }} />

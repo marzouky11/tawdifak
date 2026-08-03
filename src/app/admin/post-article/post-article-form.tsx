@@ -118,7 +118,6 @@ export function PostArticleForm({ article }: PostArticleFormProps) {
         toast({ title: "تم نشر المقال بنجاح!" });
         router.push(`/articles`);
       }
-      router.refresh();
 
     } catch (error) {
       console.error("Failed to process article:", error);

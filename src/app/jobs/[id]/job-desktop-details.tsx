@@ -143,8 +143,8 @@ export function JobDesktopDetails({ job }: JobDesktopDetailsProps) {
 
     return (
         <div className="container mx-auto max-w-5xl px-4 pb-12 space-y-6">
-            <Card className="overflow-hidden shadow-lg border-t-4" style={{ borderColor: sectionColor }}>
-                <CardHeader className="bg-muted/30 p-6">
+            <Card className="overflow-hidden shadow-lg border-2" style={{ borderColor: sectionColor }}>
+                <CardHeader className="p-6" style={{ backgroundColor: `${sectionColor}1A` }}>
                     <div className="flex items-center gap-4 mb-2">
                         <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${categoryColor}1A` }}>
                             <CategoryIcon name={finalIconName} className="h-8 w-8" style={{ color: categoryColor }} />
@@ -166,7 +166,7 @@ export function JobDesktopDetails({ job }: JobDesktopDetailsProps) {
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                         <InfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={categoryColor} />
                         <InfoItem icon={Wallet} label="الأجر" value={job.salary ? job.salary : 'عند الطلب'} color={categoryColor} />
-                        {categoryName && <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={categoryColor} />}
+                        {categoryName && <InfoItem icon={LayoutGrid} label="مجال العمل" value={categoryName} color={categoryColor} />}
                         {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
                         {translatedContractType && <InfoItem icon={FileSignature} label="نوع العقد" value={translatedContractType} color={categoryColor} />}
                         {job.companyName && <InfoItem icon={Building2} label="الشركة" value={job.companyName} color={categoryColor} />}
