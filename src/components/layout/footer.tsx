@@ -48,7 +48,7 @@ const FooterLinkItem = ({
   return (
     <Link
       href={href}
-      className="flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors"
+      className="flex items-center justify-between p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
     >
       <div className="flex items-center gap-3">
         <Icon className="h-5 w-5 text-primary" />
@@ -61,7 +61,7 @@ const FooterLinkItem = ({
 
 const MobileFooter = () => {
   return (
-    <footer className="md:hidden bg-card border-t py-6 mt-0">
+    <footer className="md:hidden bg-card dark:bg-secondary border-t py-6 mt-0">
       <div className="container mx-auto px-4 space-y-6 pb-24">
         <div>
           <h3 className="font-bold text-lg mb-3 px-2">روابط مهمة</h3>
@@ -83,7 +83,7 @@ const MobileFooter = () => {
               href="https://www.instagram.com/tawdifak?igsh=MW9wcG5vdzJzZXpjMw=="
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between p-3 rounded-lg hover:bg-muted transition-colors"
+              className="flex items-center justify-between p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
             >
               <div className="flex items-center gap-3">
                 <Instagram className="h-5 w-5 text-primary" />
@@ -112,12 +112,12 @@ const FooterColumnLink = ({
   external?: boolean;
 }) => {
   const className =
-    'group flex items-center gap-2 text-sm text-gray-500 hover:text-primary transition-colors duration-200 py-1.5';
+    'group flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-primary transition-colors duration-200 py-1.5';
 
   if (external) {
     return (
       <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
-        <span className="h-1 w-1 rounded-full bg-gray-300 group-hover:bg-primary transition-colors" />
+        <span className="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600 group-hover:bg-primary transition-colors" />
         {label}
       </a>
     );
@@ -125,7 +125,7 @@ const FooterColumnLink = ({
 
   return (
     <Link href={href} className={className}>
-      <span className="h-1 w-1 rounded-full bg-gray-300 group-hover:bg-primary transition-colors" />
+      <span className="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600 group-hover:bg-primary transition-colors" />
       {label}
     </Link>
   );
@@ -140,7 +140,7 @@ const FooterColumnTitle = ({ children }: { children: React.ReactNode }) => (
 
 const DesktopFooter = () => {
   return (
-    <footer className="hidden md:block bg-white border-t border-gray-200 mt-auto">
+    <footer className="hidden md:block bg-white dark:bg-secondary border-t border-gray-200 dark:border-secondary-foreground/10 mt-auto">
       {/* Accent strip */}
       <div className="h-[3px] w-full bg-gradient-to-l from-primary via-primary/50 to-primary/10" />
 
@@ -210,15 +210,15 @@ const DesktopFooter = () => {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-gray-100 py-6">
-          <p className="text-sm text-gray-500">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-gray-100 dark:border-secondary-foreground/10 py-6">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             &copy; توظيفك. جميع الحقوق محفوظة {new Date().getFullYear()}
           </p>
           <a
             href="https://www.instagram.com/tawdifak?igsh=MW9wcG5vdzJzZXpjMw=="
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center h-9 w-9 rounded-full border border-gray-200 text-gray-400 hover:text-primary hover:border-primary/30 transition-colors"
+            className="flex items-center justify-center h-9 w-9 rounded-full border border-gray-200 dark:border-secondary-foreground/20 text-gray-400 dark:text-gray-500 hover:text-primary hover:border-primary/30 transition-colors"
             aria-label="إنستغرام"
           >
             <Instagram className="h-4 w-4" />

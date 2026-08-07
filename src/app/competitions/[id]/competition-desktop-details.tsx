@@ -2,9 +2,10 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   CalendarDays, Briefcase, Building, Users2, FileText, Link as LinkIcon,
-  ClipboardList, Info, MapPin, Target, ListOrdered, FileUp, Award, Bookmark, Mail, HelpCircle, LayoutList
+  ClipboardList, Info, MapPin, Target, ListOrdered, FileUp, Award, Bookmark, Mail, HelpCircle, LayoutList, Clock
 } from 'lucide-react';
 import type { Competition } from '@/lib/types';
 import { CategoryIcon } from '@/components/icons';
@@ -16,19 +17,63 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { TimeAgo } from '@/components/ui/time-ago';
 
+// Returns the number of days remaining until the deadline, or null if the
+// deadline text can't be parsed as a date (it's a free-text field).
+function getDaysRemaining(dateStr?: string): number | null {
+  if (!dateStr) return null;
+  const deadline = new Date(dateStr);
+  if (isNaN(deadline.getTime())) return null;
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  deadline.setHours(0, 0, 0, 0);
+  return Math.round((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+}
+
+const DeadlineBadge = ({ daysRemaining }: { daysRemaining: number | null }) => {
+  if (daysRemaining === null) return null;
+  const urgent = daysRemaining <= 3;
+  const soon = daysRemaining > 3 && daysRemaining <= 7;
+  const expired = daysRemaining < 0;
+
+  return (
+    <Badge
+      className={cn(
+        "gap-1.5 font-semibold border-0",
+        expired && "bg-gray-200 text-gray-600 dark:bg-gray-800 dark:text-gray-400",
+        !expired && urgent && "bg-red-100 text-red-700 hover:bg-red-100 dark:bg-red-900/40 dark:text-red-300",
+        !expired && soon && "bg-amber-100 text-amber-700 hover:bg-amber-100 dark:bg-amber-900/40 dark:text-amber-300",
+        !expired && !urgent && !soon && "bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-900/40 dark:text-green-300"
+      )}
+    >
+      <Clock className="h-3.5 w-3.5" />
+      {expired
+        ? 'انتهى أجل التسجيل'
+        : daysRemaining === 0
+          ? 'آخر يوم للتسجيل اليوم!'
+          : `متبقي ${daysRemaining} ${daysRemaining === 1 ? 'يوم' : 'أيام'} على آخر أجل`}
+    </Badge>
+  );
+};
+
 const InfoItem = ({ icon: Icon, label, value, color, href, isDate }: { icon: React.ElementType; label: string; value: string | number | undefined | null; color?: string; href?: string; isDate?: boolean }) => {
     if (!value) return null;
 
+    const widthClasses = "w-[calc(50%-0.375rem)] sm:w-[calc(33.333%-0.5rem)] md:w-[calc(25%-0.5625rem)] lg:w-[calc(20%-0.6rem)] xl:w-[calc(14.2857%-0.643rem)]";
+
     const content = (
-        <div className="flex flex-col gap-1 p-3 bg-muted/50 rounded-lg text-center h-full">
-            <Icon className="h-6 w-6 mx-auto mb-1" style={{ color }} />
-            <dt className="text-xs text-muted-foreground">{label}</dt>
-            <dd className={`font-semibold text-sm ${isDate ? 'text-destructive' : ''}`}>{String(value)}</dd>
+        <div className={cn("flex items-center gap-3 bg-background rounded-lg p-3 border border-border/60 hover:border-primary/30 transition-colors h-full", !href && widthClasses)}>
+            <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full" style={{ backgroundColor: `${color}1A` }}>
+                <Icon className="h-4 w-4" style={{ color }} />
+            </div>
+            <div className="min-w-0 text-right">
+                <dt className="text-xs text-muted-foreground">{label}</dt>
+                <dd className={cn("font-semibold text-sm truncate", isDate && "text-destructive")}>{String(value)}</dd>
+            </div>
         </div>
     );
     
     if (href) {
-        return <a href={href} target="_blank" rel="noopener noreferrer" className="hover:scale-105 transition-transform text-foreground hover:text-primary">{content}</a>;
+        return <a href={href} target="_blank" rel="noopener noreferrer" className={cn("block hover:scale-[1.02] transition-transform", widthClasses)}>{content}</a>;
     }
     return content;
 };
@@ -50,7 +95,7 @@ const DetailSectionCard = ({ icon: Icon, title, color, children, className }: { 
     );
 };
 
-const FormattedText = ({ text }: { text?: string }) => {
+const FormattedText = ({ text, ordered = false }: { text?: string; ordered?: boolean }) => {
   if (!text || text.trim() === '') return <p className="italic text-muted-foreground">غير محدد</p>;
 
   const contentBlocks = text.split('\n').filter(line => line.trim() !== '');
@@ -59,12 +104,13 @@ const FormattedText = ({ text }: { text?: string }) => {
 
   const flushList = (key: string) => {
     if (listItems.length > 0) {
+      const ListTag = ordered ? 'ol' : 'ul';
       elements.push(
-        <ul key={key} className="list-disc list-outside ms-6 my-4 space-y-2">
+        <ListTag key={key} className={cn("list-outside ms-6 my-4 space-y-2", ordered ? "list-decimal marker:font-bold marker:text-foreground" : "list-disc")}>
           {listItems.map((item, idx) => (
             <li key={idx}>{item}</li>
           ))}
-        </ul>
+        </ListTag>
       );
       listItems = [];
     }
@@ -74,6 +120,8 @@ const FormattedText = ({ text }: { text?: string }) => {
     const trimmed = line.trim();
     if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
       listItems.push(trimmed.replace(/^[-*]\s*/, ''));
+    } else if (ordered) {
+      listItems.push(trimmed);
     } else {
       flushList(`ul-${i}`);
       elements.push(<p key={`p-${i}`} className="mb-4 last:mb-0">{trimmed}</p>);
@@ -98,6 +146,7 @@ export function CompetitionDesktopDetails({ competition }: CompetitionDesktopDet
     const sectionColor = '#14532d';
     const organizerIcon = organizer?.icon || 'Landmark';
     const organizerColor = organizer?.color || sectionColor;
+    const daysRemaining = getDaysRemaining(competition.deadline);
 
     const descriptionSection = competition.description ? { id: 'description', icon: Info, title: "وصف تفصيلي", content: <FormattedText text={competition.description} /> } : null;
 
@@ -109,7 +158,7 @@ export function CompetitionDesktopDetails({ competition }: CompetitionDesktopDet
         competition.trainingFeatures && { id: 'trainingFeatures', icon: Award, title: "مميزات التكوين والفرص", content: <FormattedText text={competition.trainingFeatures} /> },
         competition.jobProspects && { id: 'jobProspects', icon: Target, title: "أفق العمل بعد المباراة", content: <FormattedText text={competition.jobProspects} /> },
         ...(competition.extraSections || []).map(section => ({ id: `extra-${section.id}`, icon: LayoutList, title: section.title, content: <FormattedText text={section.content} /> })),
-        competition.howToApply && { id: 'howToApply', icon: HelpCircle, title: "طريقة التسجيل", content: <FormattedText text={competition.howToApply} /> }
+        competition.howToApply && { id: 'howToApply', icon: HelpCircle, title: "طريقة التسجيل", content: <FormattedText text={competition.howToApply} ordered /> }
     ].filter(Boolean) as { id: string; icon: React.ElementType; title: string; content: React.ReactNode; }[];
     
     return (
@@ -118,11 +167,11 @@ export function CompetitionDesktopDetails({ competition }: CompetitionDesktopDet
                  <CardHeader className="p-6" style={{ backgroundColor: `${sectionColor}1A` }}>
                      <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                         <div className="flex-grow">
-                            <div className="flex items-center gap-4 mb-2">
-                                <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${organizerColor}1A` }}>
+                            <div className="flex items-center gap-4 mb-3">
+                                <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl shadow-sm ring-1 ring-black/5 dark:ring-white/10" style={{ backgroundColor: `${organizerColor}1A` }}>
                                     <CategoryIcon name={organizerIcon} className="w-8 h-8" style={{ color: organizerColor }} />
                                 </div>
-                                <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
+                                <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-snug">
                                     {competition.title || 'عنوان غير متوفر'}
                                 </h1>
                             </div>
@@ -135,12 +184,13 @@ export function CompetitionDesktopDetails({ competition }: CompetitionDesktopDet
                                         </span>
                                     </div>
                                 </div>
+                                <DeadlineBadge daysRemaining={daysRemaining} />
                             </div>
                         </div>
                     </div>
                 </CardHeader>
                 <CardContent className="p-6 space-y-6">
-                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-3">
+                     <div className="flex flex-wrap justify-center gap-3 bg-muted/30 dark:bg-muted/10 border border-border/50 rounded-xl p-4">
                         <InfoItem icon={Building} label="الجهة المنظمة" value={competition.organizer} color={organizerColor} />
                         {competition.competitionType && <InfoItem icon={Briefcase} label="نوع المباراة" value={competition.competitionType} color={organizerColor} />}
                         {competition.location && <InfoItem icon={MapPin} label="الموقع" value={competition.location} color={organizerColor} />}

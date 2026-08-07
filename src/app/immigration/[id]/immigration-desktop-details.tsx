@@ -32,10 +32,14 @@ const visaTypeTranslations: { [key: string]: string } = {
 const InfoItem = ({ icon: Icon, label, value, color }: { icon: React.ElementType; label: string; value: string | number | undefined; color?: string }) => {
     if (!value) return null;
     return (
-        <div className="flex flex-col gap-1 p-3 bg-muted/50 rounded-lg text-center h-full">
-            <Icon className="h-6 w-6 mx-auto mb-1" style={{ color }} />
-            <dt className="text-xs text-muted-foreground">{label}</dt>
-            <dd className="font-semibold text-sm">{String(value)}</dd>
+        <div className="flex items-center gap-3 bg-background rounded-lg p-3 border border-border/60 hover:border-primary/30 transition-colors h-full w-[calc(50%-0.375rem)] sm:w-[calc(33.333%-0.5rem)] md:w-[calc(25%-0.5625rem)] lg:w-[calc(16.666%-0.625rem)]">
+            <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full" style={{ backgroundColor: `${color}1A` }}>
+                <Icon className="h-4 w-4" style={{ color }} />
+            </div>
+            <div className="min-w-0 text-right">
+                <dt className="text-xs text-muted-foreground">{label}</dt>
+                <dd className="font-semibold text-sm truncate">{String(value)}</dd>
+            </div>
         </div>
     );
 };
@@ -57,7 +61,7 @@ const DetailSectionCard = ({ icon: Icon, title, color, children, className }: { 
     );
 };
 
-const FormattedText = ({ text }: { text?: string }) => {
+const FormattedText = ({ text, ordered = false }: { text?: string; ordered?: boolean }) => {
   if (!text || text.trim() === '') return <p className="italic text-muted-foreground">غير محدد</p>;
 
   const contentBlocks = text.split('\n').filter(line => line.trim() !== '');
@@ -66,12 +70,13 @@ const FormattedText = ({ text }: { text?: string }) => {
 
   const flushList = (key: string) => {
     if (listItems.length > 0) {
+      const ListTag = ordered ? 'ol' : 'ul';
       elements.push(
-        <ul key={key} className="list-disc list-outside ms-6 my-4 space-y-2">
+        <ListTag key={key} className={cn("list-outside ms-6 my-4 space-y-2", ordered ? "list-decimal marker:font-bold marker:text-foreground" : "list-disc")}>
           {listItems.map((item, idx) => (
             <li key={idx}>{item}</li>
           ))}
-        </ul>
+        </ListTag>
       );
       listItems = [];
     }
@@ -81,6 +86,8 @@ const FormattedText = ({ text }: { text?: string }) => {
     const trimmed = line.trim();
     if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
       listItems.push(trimmed.replace(/^[-*]\s*/, ''));
+    } else if (ordered) {
+      listItems.push(trimmed);
     } else {
       flushList(`ul-${i}`);
       elements.push(<p key={`p-${i}`} className="mb-4 last:mb-0">{trimmed}</p>);
@@ -123,7 +130,7 @@ export function ImmigrationDesktopDetails({ post }: ImmigrationDesktopDetailsPro
         post.tasks && { id: 'tasks', icon: CheckSquare, title: "المهام المطلوبة", content: <FormattedText text={post.tasks} /> },
         post.featuresAndOpportunities && { id: 'featuresAndOpportunities', icon: Target, title: "المميزات والفرص", content: <FormattedText text={post.featuresAndOpportunities} /> },
         ...(post.extraSections || []).map(section => ({ id: `extra-${section.id}`, icon: LayoutList, title: section.title, content: <FormattedText text={section.content} /> })),
-        post.howToApply && { id: 'howToApply', icon: HelpCircle, title: "كيفية التقديم", content: <FormattedText text={post.howToApply} /> }
+        post.howToApply && { id: 'howToApply', icon: HelpCircle, title: "كيفية التقديم", content: <FormattedText text={post.howToApply} ordered /> }
     ].filter(Boolean) as { id: string; icon: React.ElementType; title: string; content: React.ReactNode; }[];
     
 
@@ -131,11 +138,11 @@ export function ImmigrationDesktopDetails({ post }: ImmigrationDesktopDetailsPro
         <div className="container mx-auto max-w-5xl px-4 pb-12 space-y-6">
             <Card className="overflow-hidden shadow-lg border-2" style={{ borderColor: sectionColor }}>
                  <CardHeader className="p-6" style={{ backgroundColor: `${sectionColor}1A`}}>
-                    <div className="flex items-center gap-4 mb-2">
-                       <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${iconColor}2A` }}>
+                    <div className="flex items-center gap-4 mb-3">
+                       <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl shadow-sm ring-1 ring-black/5 dark:ring-white/10" style={{ backgroundColor: `${iconColor}2A` }}>
                             <CategoryIcon name={iconName} className="h-8 w-8" style={{ color: iconColor }} />
                        </div>
-                        <h1 className="text-3xl font-bold text-foreground">
+                        <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-snug">
                             {post.title}
                         </h1>
                     </div>
@@ -147,9 +154,21 @@ export function ImmigrationDesktopDetails({ post }: ImmigrationDesktopDetailsPro
                             </span>
                         </div>
                     </div>
+                    <div className="flex flex-wrap items-center gap-x-5 gap-y-2 pt-2">
+                        {post.salary && (
+                            <div className="flex items-center gap-1.5 font-bold text-base" style={{ color: iconColor }}>
+                                <Wallet className="h-4 w-4" />
+                                <span>{post.salary}</span>
+                            </div>
+                        )}
+                        <div className="flex items-center gap-1.5 font-semibold text-foreground">
+                            <MapPin className="h-4 w-4" />
+                            <span>{post.targetCountry}{post.city ? `, ${post.city}` : ''}</span>
+                        </div>
+                    </div>
                 </CardHeader>
                 <CardContent className="p-6 space-y-6">
-                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                     <div className="flex flex-wrap justify-center gap-3 bg-muted/30 dark:bg-muted/10 border border-border/50 rounded-xl p-4">
                         <InfoItem icon={LayoutGrid} label="نوع البرنامج" value={programDetails.label} color={iconColor} />
                         {post.visaType && <InfoItem icon={Plane} label="نوع التأشيرة" value={visaTypeTranslations[post.visaType] || post.visaType} color={iconColor} />}
                         <InfoItem icon={MapPin} label="الموقع" value={`${post.targetCountry}${post.city ? ', ' + post.city : ''}`} color={iconColor} />

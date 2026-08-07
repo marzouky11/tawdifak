@@ -3,9 +3,10 @@ import React from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
-  Phone, MessageSquare, MapPin, CalendarDays, User as UserIcon, Clock,
-  Instagram, GraduationCap, Mail, LayoutGrid, FileText, Bookmark, Share2, FileSignature
+  Phone, MessageSquare, MapPin, CalendarDays, Clock,
+  Instagram, GraduationCap, Mail, LayoutGrid, FileText, Bookmark, FileSignature, CheckCircle2
 } from 'lucide-react';
 import type { Job, WorkType } from '@/lib/types';
 import { ShareButton } from '@/app/jobs/[id]/share-button';
@@ -35,15 +36,21 @@ const contractTypeTranslations: { [key: string]: string } = {
   other: 'أخرى',
 };
 
-const InfoItem = ({ icon: Icon, label, value, color }: { icon: React.ElementType; label: string; value: string | number | undefined; color?: string }) => {
-    if (!value) return null;
-    return (
-      <div className="flex flex-col gap-1 p-3 bg-muted/50 rounded-lg text-center h-full">
-        <Icon className="h-6 w-6 mx-auto mb-1" style={{ color }} />
-        <dt className="text-xs text-muted-foreground">{label}</dt>
-        <dd className="font-semibold text-sm">{String(value)}</dd>
+// A clean CV-style "label / value" row, instead of the colorful ad-style tiles
+// used on job/immigration/competition detail pages.
+const InfoRow = ({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string | number | undefined }) => {
+  if (!value) return null;
+  return (
+    <div className="flex items-start gap-3 py-2.5 w-[calc(50%-0.5rem)] sm:w-[calc(33.333%-0.667rem)] lg:w-[calc(20%-0.8rem)]">
+      <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
+        <Icon className="h-4 w-4 text-slate-600 dark:text-slate-300" />
       </div>
-    );
+      <div className="min-w-0">
+        <dt className="text-xs text-muted-foreground">{label}</dt>
+        <dd className="font-semibold text-sm text-foreground break-words">{String(value)}</dd>
+      </div>
+    </div>
+  );
 };
 
 const FormattedText = ({ text }: { text?: string }) => {
@@ -85,23 +92,6 @@ const FormattedText = ({ text }: { text?: string }) => {
   );
 };
 
-const DetailSectionCard = ({ icon: Icon, title, color, children, className }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode, className?:string }) => {
-    if (!children) return null;
-    return (
-        <Card className={className}>
-            <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-xl" style={{color}}>
-                    <Icon className="h-5 w-5" />
-                    {title}
-                </CardTitle>
-            </CardHeader>
-            <CardContent>
-                {children}
-            </CardContent>
-        </Card>
-    );
-};
-
 interface WorkerDesktopDetailsProps {
     job: Job;
 }
@@ -110,131 +100,126 @@ export function WorkerDesktopDetails({ job }: WorkerDesktopDetailsProps) {
     const categoryName = job.categoryName;
     const translatedWorkType = job.workType ? workTypeTranslations[job.workType] : undefined;
     const translatedContractType = job.contractType ? contractTypeTranslations[job.contractType] : undefined;
-    const sectionColor = '#424242';
-    const primaryColor = 'hsl(var(--primary))';
+    const accentColor = '#424242';
 
     const contactButtons = [
-        job.phone && { type: 'phone', href: `tel:${job.phone}`, label: 'اتصال', icon: Phone, className: 'bg-[#424242] hover:bg-[#424242]/90' },
+        job.phone && { type: 'phone', href: `tel:${job.phone}`, label: 'اتصال', icon: Phone, className: 'bg-slate-700 hover:bg-slate-800' },
         job.whatsapp && { type: 'whatsapp', href: `https://wa.me/${job.whatsapp.replace(/\+/g, '')}`, label: 'واتساب', icon: MessageSquare, className: 'bg-green-600 hover:bg-green-700' },
         job.email && { type: 'email', href: `mailto:${job.email}`, label: 'البريد الإلكتروني', icon: Mail, className: 'bg-gray-600 hover:bg-gray-700' },
         job.instagram && { type: 'instagram', href: `https://instagram.com/${job.instagram.replace(/@/g, '')}`, label: 'إنستغرام', icon: Instagram, className: 'bg-gradient-to-r from-pink-500 to-orange-500 hover:opacity-90' },
     ].filter(Boolean);
-    
-    const descriptionSection = job.description ? { id: 'description', icon: FileText, title: "وصف المهارات والخبرة", content: <FormattedText text={job.description} /> } : null;
-
-    const allOtherSections = [
-        job.qualifications && { id: 'qualifications', icon: GraduationCap, title: "الشهادات والمؤهلات", content: <FormattedText text={job.qualifications} /> }
-    ].filter(Boolean) as { id: string; icon: React.ElementType; title: string; content: React.ReactNode; }[];
 
     return (
-        <div className="container mx-auto max-w-5xl px-4 pb-12 space-y-6">
-            <Card className="overflow-hidden shadow-lg border" style={{ borderColor: sectionColor }}>
-                 <CardHeader className="bg-muted/30 p-6">
-                     <div className="flex items-center gap-4">
-                        <UserAvatar name={job.ownerName} color={job.ownerAvatarColor} photoURL={job.ownerPhotoURL} className="h-20 w-20 text-3xl flex-shrink-0"/>
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
-                                {job.title || 'عنوان غير متوفر'}
-                            </h1>
-                        </div>
-                    </div>
-                </CardHeader>
-                <Separator/>
-                <CardContent className="p-6 space-y-6">
-                     <div className="flex items-center gap-1.5 text-muted-foreground text-sm">
-                        <CalendarDays className="h-4 w-4" />
-                        <span>نُشر: {job.postedAt}</span>
-                    </div>
+        <div className="container mx-auto max-w-5xl px-4 pb-12">
+            <div className="space-y-6">
 
-                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
-                        <InfoItem icon={UserIcon} label="صاحب الإعلان" value={job.ownerName} color={primaryColor} />
-                        <InfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={primaryColor} />
-                        {categoryName && <InfoItem icon={LayoutGrid} label="مجال العمل" value={categoryName} color={primaryColor} />}
-                        {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={primaryColor} />}
-                        {translatedContractType && <InfoItem icon={FileSignature} label="نوع العقد" value={translatedContractType} color={primaryColor} />}
-                    </div>
+                {/* Profile card */}
+                <Card className="overflow-hidden shadow-lg">
+                    <div className="h-16" style={{ backgroundColor: accentColor }} />
+                    <CardContent className="pt-0 text-center -mt-10">
+                        <UserAvatar
+                            name={job.ownerName}
+                            color={job.ownerAvatarColor}
+                            photoURL={job.ownerPhotoURL}
+                            className="h-20 w-20 text-3xl mx-auto ring-4 ring-background"
+                        />
+                        <h1 className="mt-3 text-xl font-bold text-foreground break-words">
+                            {job.ownerName}
+                        </h1>
+                        {job.title && (
+                            <p className="text-sm text-muted-foreground mt-1 break-words">{job.title}</p>
+                        )}
+                        <Badge className="mt-3 bg-green-100 text-green-700 hover:bg-green-100 dark:bg-green-900/40 dark:text-green-300 border-0 gap-1.5 font-medium">
+                            <CheckCircle2 className="h-3.5 w-3.5" />
+                            متاح للعمل الآن
+                        </Badge>
 
-                    {descriptionSection && (
-                        <>
-                            <Separator className="my-6" />
-                            <DetailSectionCard 
-                                icon={descriptionSection.icon} 
-                                title={descriptionSection.title} 
-                                color={sectionColor}
-                                className="col-span-full"
-                            >
-                                {descriptionSection.content}
-                            </DetailSectionCard>
-                        </>
-                    )}
-                    
-                    {allOtherSections.length > 0 && (
-                        <>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                                {allOtherSections.map((section, index) => (
-                                    <DetailSectionCard 
-                                        key={section.id} 
-                                        icon={section.icon} 
-                                        title={section.title} 
-                                        color={sectionColor}
-                                        className={cn(allOtherSections.length % 2 !== 0 && index === allOtherSections.length - 1 && 'md:col-span-2')}
+                        <Separator className="my-5" />
+
+                        <dl className="flex flex-wrap justify-center gap-x-4 text-right divide-y-0">
+                            <InfoRow icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} />
+                            {categoryName && <InfoRow icon={LayoutGrid} label="مجال العمل" value={categoryName} />}
+                            {translatedWorkType && <InfoRow icon={Clock} label="نوع الدوام المفضل" value={translatedWorkType} />}
+                            {translatedContractType && <InfoRow icon={FileSignature} label="نوع العقد المفضل" value={translatedContractType} />}
+                            <InfoRow icon={CalendarDays} label="تاريخ النشر" value={job.postedAt} />
+                        </dl>
+                    </CardContent>
+                </Card>
+
+                {/* Description + Qualifications side by side */}
+                <div className="grid md:grid-cols-2 gap-6">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 text-xl font-bold">
+                                <FileText className="h-5 w-5" style={{ color: accentColor }} />
+                                <span className="text-foreground">وصف المهارات والخبرة</span>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <FormattedText text={job.description} />
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 text-xl font-bold">
+                                <GraduationCap className="h-5 w-5" style={{ color: accentColor }} />
+                                <span className="text-foreground">الشهادات والمؤهلات</span>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <FormattedText text={job.qualifications} />
+                        </CardContent>
+                    </Card>
+                </div>
+
+                {/* Contact + Save side by side */}
+                <div className="grid md:grid-cols-2 gap-6">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 text-xl font-bold">
+                                <Phone className="h-5 w-5" style={{ color: accentColor }} />
+                                <span className="text-foreground">تواصل مع الباحث عن عمل</span>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="pt-0 grid grid-cols-1 gap-3">
+                            {contactButtons.map(button => {
+                                if (!button) return null;
+                                return (
+                                    <Button
+                                        key={button.type}
+                                        asChild
+                                        size="lg"
+                                        className={cn("h-auto py-3 text-primary-foreground font-semibold text-base active:scale-95 transition-transform", button.className)}
                                     >
-                                        {section.content}
-                                    </DetailSectionCard>
-                                ))}
-                            </div>
-                        </>
-                    )}
+                                        <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
+                                            <button.icon className="ml-2 h-5 w-5" />
+                                            {button.label}
+                                        </a>
+                                    </Button>
+                                )
+                            })}
+                        </CardContent>
+                    </Card>
 
-                </CardContent>
-            </Card>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 text-xl font-bold">
+                                <Bookmark className="h-5 w-5" style={{ color: accentColor }} />
+                                <span className="text-foreground">احفظ الإعلان وشارك مع الآخرين</span>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex flex-col gap-3 pt-0">
+                            <SaveAdButton adId={job.id} adType="job" />
+                            <ShareButton title={job.title || ''} text={job.description || ''} />
+                        </CardContent>
+                    </Card>
+                </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
-                <Card>
-                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-xl font-bold">
-                            <Phone className="h-5 w-5" style={{ color: sectionColor }}/>
-                            <span className="text-foreground">تواصل مع الباحث عن عمل</span>
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-0 grid grid-cols-1 gap-3">
-                        {contactButtons.map(button => {
-                            if (!button) return null;
-                            return (
-                                <Button
-                                    key={button.type}
-                                    asChild
-                                    size="lg"
-                                    className={cn("text-primary-foreground font-semibold text-base py-6 active:scale-95 transition-transform", button.className)}
-                                >
-                                    <a href={button.href} target={button.type !== 'phone' ? '_blank' : undefined} rel="noopener noreferrer">
-                                        <button.icon className="ml-2 h-5 w-5" />
-                                        {button.label}
-                                    </a>
-                                </Button>
-                            )
-                        })}
-                    </CardContent>
-                </Card>
-
-                <Card>
-                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2 text-xl font-bold">
-                            <Bookmark className="h-5 w-5" style={{ color: sectionColor }}/>
-                            <span className="text-foreground">احفظ الإعلان وشارك مع الآخرين</span>
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex flex-col gap-3 pt-0">
-                        <SaveAdButton adId={job.id} adType="job" />
-                        <ShareButton title={job.title || ''} text={job.description || ''} />
-                    </CardContent>
-                </Card>
+                <div className="text-center">
+                    <ReportAdDialog adId={job.id} />
+                </div>
             </div>
-            
-            <div className="text-center pt-4">
-                <ReportAdDialog adId={job.id} />
-            </div>
-            
         </div>
     );
 }

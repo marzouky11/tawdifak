@@ -42,15 +42,19 @@ const contractTypeTranslations: { [key: string]: string } = {
 const InfoItem = ({ icon: Icon, label, value, color }: { icon: React.ElementType; label: string; value: string | number | undefined; color?: string }) => {
     if (!value) return null;
     return (
-      <div className="flex flex-col gap-1 p-3 bg-muted/50 rounded-lg text-center">
-        <Icon className="h-6 w-6 mx-auto mb-1" style={{ color }} />
-        <dt className="text-xs text-muted-foreground">{label}</dt>
-        <dd className="font-semibold text-sm">{String(value)}</dd>
+      <div className="flex items-center gap-3 bg-background rounded-lg p-3 border border-border/60 hover:border-primary/30 transition-colors w-[calc(50%-0.375rem)] sm:w-[calc(33.333%-0.5rem)] md:w-[calc(25%-0.5625rem)] lg:w-[calc(20%-0.6rem)] xl:w-[calc(16.666%-0.625rem)]">
+        <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full" style={{ backgroundColor: `${color}1A` }}>
+          <Icon className="h-4 w-4" style={{ color }} />
+        </div>
+        <div className="min-w-0 text-right">
+          <dt className="text-xs text-muted-foreground">{label}</dt>
+          <dd className="font-semibold text-sm truncate">{String(value)}</dd>
+        </div>
       </div>
     );
 };
 
-const FormattedText = ({ text }: { text?: string }) => {
+const FormattedText = ({ text, ordered = false }: { text?: string; ordered?: boolean }) => {
   if (!text || text.trim() === '') return <p className="italic text-muted-foreground">غير محدد</p>;
 
   const contentBlocks = text.split('\n').filter(line => line.trim() !== '');
@@ -59,12 +63,13 @@ const FormattedText = ({ text }: { text?: string }) => {
 
   const flushList = (key: string) => {
     if (listItems.length > 0) {
+      const ListTag = ordered ? 'ol' : 'ul';
       elements.push(
-        <ul key={key} className="list-disc list-outside ms-6 my-4 space-y-2">
+        <ListTag key={key} className={cn("list-outside ms-6 my-4 space-y-2", ordered ? "list-decimal marker:font-bold marker:text-foreground" : "list-disc")}>
           {listItems.map((item, idx) => (
             <li key={idx}>{item}</li>
           ))}
-        </ul>
+        </ListTag>
       );
       listItems = [];
     }
@@ -74,6 +79,9 @@ const FormattedText = ({ text }: { text?: string }) => {
     const trimmed = line.trim();
     if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
       listItems.push(trimmed.replace(/^[-*]\s*/, ''));
+    } else if (ordered) {
+      // In ordered/step mode, treat every non-empty line as its own step.
+      listItems.push(trimmed);
     } else {
       flushList(`ul-${i}`);
       elements.push(<p key={`p-${i}`} className="mb-4 last:mb-0">{trimmed}</p>);
@@ -137,7 +145,7 @@ export function JobDesktopDetails({ job }: JobDesktopDetailsProps) {
         job.tasks && { id: 'tasks', icon: CheckSquare, title: "المهام المطلوبة", content: <FormattedText text={job.tasks} /> },
         job.featuresAndOpportunities && { id: 'featuresAndOpportunities', icon: Target, title: "المميزات والفرص", content: <FormattedText text={job.featuresAndOpportunities} /> },
         ...(job.extraSections || []).map(section => ({ id: `extra-${section.id}`, icon: LayoutList, title: section.title, content: <FormattedText text={section.content} /> })),
-        job.howToApply && { id: 'howToApply', icon: HelpCircle, title: "كيفية التقديم", content: <FormattedText text={job.howToApply} /> }
+        job.howToApply && { id: 'howToApply', icon: HelpCircle, title: "كيفية التقديم", content: <FormattedText text={job.howToApply} ordered /> }
     ].filter(Boolean) as { id: string; icon: React.ElementType; title: string; content: React.ReactNode; }[];
     
 
@@ -145,25 +153,33 @@ export function JobDesktopDetails({ job }: JobDesktopDetailsProps) {
         <div className="container mx-auto max-w-5xl px-4 pb-12 space-y-6">
             <Card className="overflow-hidden shadow-lg border-2" style={{ borderColor: sectionColor }}>
                 <CardHeader className="p-6" style={{ backgroundColor: `${sectionColor}1A` }}>
-                    <div className="flex items-center gap-4 mb-2">
-                        <div className="p-3 rounded-xl flex-shrink-0" style={{ backgroundColor: `${categoryColor}1A` }}>
+                    <div className="flex items-center gap-4 mb-3">
+                        <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl shadow-sm ring-1 ring-black/5 dark:ring-white/10" style={{ backgroundColor: `${categoryColor}1A` }}>
                             <CategoryIcon name={finalIconName} className="h-8 w-8" style={{ color: categoryColor }} />
                         </div>
-                        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+                        <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-snug">
                             {job.title || 'عنوان غير متوفر'}
                         </h1>
                     </div>
-                     <div className="flex items-center gap-x-4 text-muted-foreground text-sm">
+                     <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-muted-foreground text-sm">
                         <div className="flex items-center gap-1.5">
                             <CalendarDays className="h-4 w-4" />
                             <span>
                                 نُشرت: <TimeAgo date={job.createdAtISO || new Date().toISOString()} initialText={job.postedAt} />
                             </span>
                         </div>
+                        <div className="flex items-center gap-1.5 font-bold text-base" style={{ color: categoryColor }}>
+                            <Wallet className="h-4 w-4" />
+                            <span>{job.salary ? job.salary : 'الأجر عند الطلب'}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 font-semibold text-foreground">
+                            <MapPin className="h-4 w-4" />
+                            <span>{job.country}, {job.city}</span>
+                        </div>
                     </div>
                 </CardHeader>
                 <CardContent className="p-6 space-y-6">
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                    <div className="flex flex-wrap justify-center gap-3 bg-muted/30 dark:bg-muted/10 border border-border/50 rounded-xl p-4">
                         <InfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={categoryColor} />
                         <InfoItem icon={Wallet} label="الأجر" value={job.salary ? job.salary : 'عند الطلب'} color={categoryColor} />
                         {categoryName && <InfoItem icon={LayoutGrid} label="مجال العمل" value={categoryName} color={categoryColor} />}
