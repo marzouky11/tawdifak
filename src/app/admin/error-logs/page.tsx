@@ -105,7 +105,7 @@ export default function AdminErrorLogsPage() {
       {authLoading || (loading && logs.length === 0) ? (
         <FullPageLoader />
       ) : (
-      <div className="container mx-auto max-w-7xl px-4 pb-12 space-y-6">
+      <div className="container mx-auto max-w-7xl px-4 pb-12">
          {logs.length > 0 ? (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

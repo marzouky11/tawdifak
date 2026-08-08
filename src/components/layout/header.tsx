@@ -127,7 +127,7 @@ export function Header() {
           <Link href="/" className="flex items-center gap-2 flex-shrink-0">
             <Image src="/LOGO2.png" alt="شعار توظيفك" width={140} height={38} priority />
           </Link>
-          <div className="flex items-center gap-2 md:gap-3 lg:gap-5 xl:gap-6">
+          <div className="flex items-center gap-1 lg:gap-6">
             {navLinks.map((link) => {
               const isActive = link.href === '/' ? pathname === link.href : pathname.startsWith(link.href);
               return (
@@ -135,7 +135,7 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    'text-base lg:text-lg font-medium transition-colors hover:text-primary px-2 py-1 rounded-md whitespace-nowrap',
+                    'text-base lg:text-lg font-medium transition-colors hover:text-primary px-2 py-1 lg:px-0 lg:py-0 rounded-md',
                     isActive ? 'text-primary' : 'text-muted-foreground'
                   )}
                 >

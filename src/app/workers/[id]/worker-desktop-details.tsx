@@ -136,7 +136,7 @@ export function WorkerDesktopDetails({ job }: WorkerDesktopDetailsProps) {
 
                         <Separator className="my-5" />
 
-                        <dl className="flex flex-wrap justify-center gap-x-4 text-right divide-y-0">
+                        <dl className="flex flex-wrap justify-center gap-x-4 text-right divide-x divide-border/70 dark:divide-border/40">
                             <InfoRow icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} />
                             {categoryName && <InfoRow icon={LayoutGrid} label="مجال العمل" value={categoryName} />}
                             {translatedWorkType && <InfoRow icon={Clock} label="نوع الدوام المفضل" value={translatedWorkType} />}
@@ -148,7 +148,8 @@ export function WorkerDesktopDetails({ job }: WorkerDesktopDetailsProps) {
 
                 {/* Description + Qualifications side by side */}
                 <div className="grid md:grid-cols-2 gap-6">
-                    <Card>
+                    <Card className="relative overflow-hidden">
+                        <div className="absolute top-0 right-0 h-full w-1" style={{ backgroundColor: accentColor }} />
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-xl font-bold">
                                 <FileText className="h-5 w-5" style={{ color: accentColor }} />
@@ -160,7 +161,8 @@ export function WorkerDesktopDetails({ job }: WorkerDesktopDetailsProps) {
                         </CardContent>
                     </Card>
 
-                    <Card>
+                    <Card className="relative overflow-hidden">
+                        <div className="absolute top-0 right-0 h-full w-1" style={{ backgroundColor: accentColor }} />
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-xl font-bold">
                                 <GraduationCap className="h-5 w-5" style={{ color: accentColor }} />

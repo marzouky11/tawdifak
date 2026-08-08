@@ -100,7 +100,7 @@ export default function AdminManageImmigrationPage() {
       ) : (
       <div className="flex-grow container mx-auto max-w-7xl px-4 pb-12">
         <Card>
-          <CardContent className="pt-6 space-y-6">
+          <CardContent className="pt-6">
             <ImmigrationGrid posts={posts} onAdDelete={(id) => setPostToDelete(id)} />
             <LoadMoreButton
               onClick={() => fetchPosts(true)}

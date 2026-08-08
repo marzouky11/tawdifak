@@ -55,7 +55,7 @@ export default function AdminDashboardPage() {
       {loading || !userData?.isAdmin ? (
         <FullPageLoader />
       ) : (
-      <div className="container mx-auto max-w-6xl px-4 pb-12 grid grid-cols-1 gap-6 items-start">
+      <div className="container mx-auto max-w-3xl px-4 pb-12 grid grid-cols-1 gap-6 items-start">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">

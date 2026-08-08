@@ -197,7 +197,7 @@ export default function AdminUsersPage() {
             </div>
 
             {hasMore && (
-              <div className="text-center mt-6">
+              <div className="text-center mt-8">
                 <Button 
                   onClick={loadMoreUsers} 
                   disabled={loadingMore} 

@@ -55,13 +55,13 @@ const DeadlineBadge = ({ daysRemaining }: { daysRemaining: number | null }) => {
   );
 };
 
+const infoItemWidthClasses = "w-[calc(50%-0.375rem)] sm:w-[calc(33.333%-0.5rem)] md:w-[calc(25%-0.5625rem)] lg:w-[calc(20%-0.6rem)] xl:w-[calc(14.2857%-0.6429rem)]";
+
 const InfoItem = ({ icon: Icon, label, value, color, href, isDate }: { icon: React.ElementType; label: string; value: string | number | undefined | null; color?: string; href?: string; isDate?: boolean }) => {
     if (!value) return null;
 
-    const widthClasses = "w-[calc(50%-0.375rem)] sm:w-[calc(33.333%-0.5rem)] md:w-[calc(25%-0.5625rem)] lg:w-[calc(20%-0.6rem)] xl:w-[calc(14.2857%-0.643rem)]";
-
     const content = (
-        <div className={cn("flex items-center gap-3 bg-background rounded-lg p-3 border border-border/60 hover:border-primary/30 transition-colors h-full", !href && widthClasses)}>
+        <div className="flex items-center gap-3 bg-background rounded-lg p-3 border border-border/60 hover:border-primary/30 transition-colors h-full">
             <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full" style={{ backgroundColor: `${color}1A` }}>
                 <Icon className="h-4 w-4" style={{ color }} />
             </div>
@@ -73,9 +73,9 @@ const InfoItem = ({ icon: Icon, label, value, color, href, isDate }: { icon: Rea
     );
     
     if (href) {
-        return <a href={href} target="_blank" rel="noopener noreferrer" className={cn("block hover:scale-[1.02] transition-transform", widthClasses)}>{content}</a>;
+        return <a href={href} target="_blank" rel="noopener noreferrer" className={cn("block hover:scale-[1.02] transition-transform", infoItemWidthClasses)}>{content}</a>;
     }
-    return content;
+    return <div className={infoItemWidthClasses}>{content}</div>;
 };
 
 const DetailSectionCard = ({ icon: Icon, title, color, children, className }: { icon: React.ElementType, title: string, color?: string, children: React.ReactNode, className?: string }) => {

@@ -159,7 +159,8 @@ export function WorkerMobileDetails({ job }: WorkerMobileDetailsProps) {
                 )}
 
                 {job.qualifications && (
-                    <Card>
+                    <Card className="relative overflow-hidden">
+                        <div className="absolute top-0 right-0 h-full w-1" style={{ backgroundColor: accentColor }} />
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2 text-lg">
                                 <GraduationCap className="h-5 w-5" style={{ color: accentColor }} />

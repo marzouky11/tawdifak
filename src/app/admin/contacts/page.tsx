@@ -112,7 +112,7 @@ export default function AdminContactsPage() {
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {messages.map((message) => (
-                  <Card key={message.id}>
+                  <Card key={message.id} className="flex flex-col h-full">
                       <CardHeader>
                           <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
                               <div>
@@ -124,7 +124,7 @@ export default function AdminContactsPage() {
                               <Badge variant="secondary" className="shrink-0">{formatDate(message.createdAt)}</Badge>
                           </div>
                       </CardHeader>
-                      <CardContent>
+                      <CardContent className="flex-grow">
                           <p className="whitespace-pre-wrap">{message.message}</p>
                       </CardContent>
                       <CardFooter className="border-t pt-4">
@@ -140,13 +140,11 @@ export default function AdminContactsPage() {
                   </Card>
                 ))}
               </div>
-              <div className="mt-6">
-                <LoadMoreButton
-                  onClick={() => fetchMessages(true)}
-                  loading={loadingMore}
-                  hasMore={hasMore}
-                />
-              </div>
+              <LoadMoreButton
+                onClick={() => fetchMessages(true)}
+                loading={loadingMore}
+                hasMore={hasMore}
+              />
             </>
         ) : (
              <div className="text-center text-muted-foreground py-10">

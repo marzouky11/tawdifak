@@ -108,9 +108,10 @@ export default function AdminReportsPage() {
       {authLoading || (loading && reports.length === 0) ? (
         <FullPageLoader />
       ) : (
-      <div className="container mx-auto max-w-4xl px-4 pb-12 space-y-6">
+      <div className="container mx-auto max-w-4xl px-4 pb-12">
          {reports.length > 0 ? (
             <>
+              <div className="space-y-6">
               {reports.map((report) => (
                 <Card key={report.id}>
                     <CardHeader>
@@ -142,6 +143,7 @@ export default function AdminReportsPage() {
                      </CardFooter>
                 </Card>
               ))}
+              </div>
               <LoadMoreButton
                 onClick={() => fetchReports(true)}
                 loading={loadingMore}
