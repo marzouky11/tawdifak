@@ -15,7 +15,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Loader2, Trash2, Edit, MessageSquare, PlusCircle } from 'lucide-react';
+import { Loader2, Trash2, FileSignature, MessageSquare, PlusCircle } from 'lucide-react';
 import { FullPageLoader } from '@/components/ui/full-page-loader';
 import { getUserTestimonial, deleteTestimonial } from '@/lib/data';
 import type { Testimonial } from '@/lib/types';
@@ -89,22 +89,26 @@ export default function MyTestimonialPage() {
       ) : (
         <div className="container mx-auto max-w-2xl px-4 pb-12">
           {testimonial ? (
-            <div className="space-y-6">
+            <div className="space-y-3">
               <TestimonialCard testimonial={testimonial} />
-              <div className="flex flex-row flex-nowrap gap-3 justify-center">
-                <Button asChild className="active:scale-95 transition-transform">
+              <div className="flex gap-2">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="flex-1 flex items-center justify-center gap-2 active:scale-95 transition-transform"
+                >
                   <Link href={`/edit-testimonial/${testimonial.id}`}>
-                    <Edit className="ml-2 h-4 w-4" />
-                    تعديل رأيي
+                    <FileSignature className="h-4 w-4" />
+                    <span>تعديل</span>
                   </Link>
                 </Button>
                 <Button
                   variant="destructive"
-                  className="active:scale-95 transition-transform"
+                  className="flex-1 flex items-center justify-center gap-2 active:scale-95 transition-transform"
                   onClick={() => setShowDeleteDialog(true)}
                 >
-                  <Trash2 className="ml-2 h-4 w-4" />
-                  حذف رأيي
+                  <Trash2 className="h-4 w-4" />
+                  <span>حذف</span>
                 </Button>
               </div>
             </div>
@@ -141,4 +145,5 @@ export default function MyTestimonialPage() {
       </AlertDialog>
     </>
   );
-}
+  }
+                  
