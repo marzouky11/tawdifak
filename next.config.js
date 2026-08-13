@@ -106,24 +106,6 @@ const nextConfig = {
         ],
       },
       {
-        source: '/api/jobs',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=600, stale-while-revalidate=300',
-          },
-        ],
-      },
-      {
-        source: '/api/ads',
-        headers: [
-          {
-            key: 'Cache-Control', 
-            value: 'public, max-age=600, stale-while-revalidate=300',
-          },
-        ],
-      },
-      {
         source: '/:path*.html',
         headers: [
           {
@@ -141,4 +123,5 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
-        
+
+      
