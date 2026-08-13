@@ -6,7 +6,7 @@ import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
 import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { DesktopPageHeader } from '@/components/layout/desktop-page-header';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Loader2, Newspaper, Trash2, Edit } from 'lucide-react';
 import { FullPageLoader } from '@/components/ui/full-page-loader';
 import {
@@ -146,7 +146,7 @@ export default function AdminArticlesPage() {
                       {article.summary}
                     </p>
                   </CardContent>
-                  <div className="p-4 pt-0 mt-auto flex gap-2">
+                  <CardFooter className="border-t pt-4 mt-auto flex gap-2">
                       <Button asChild variant="outline" className="flex-1 active:scale-95 transition-transform">
                           <Link href={`/admin/post-article?id=${article.id}`}>
                               <Edit className="mr-2 h-4 w-4" />
@@ -157,7 +157,7 @@ export default function AdminArticlesPage() {
                           <Trash2 className="mr-2 h-4 w-4" />
                           حذف
                       </Button>
-                  </div>
+                  </CardFooter>
                 </Card>
               ))}
             </div>
@@ -213,4 +213,4 @@ export default function AdminArticlesPage() {
       </AlertDialog>
     </>
   );
-}
+            }
