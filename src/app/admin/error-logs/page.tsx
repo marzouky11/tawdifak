@@ -108,7 +108,7 @@ export default function AdminErrorLogsPage() {
       <div className="container mx-auto max-w-7xl px-4 pb-12">
          {logs.length > 0 ? (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {logs.map((log) => (
                   <Card key={log.id} className="flex flex-col">
                       <CardHeader>
@@ -168,4 +168,4 @@ export default function AdminErrorLogsPage() {
       </AlertDialog>
     </>
   );
-}
+                                         }
