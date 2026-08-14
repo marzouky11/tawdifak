@@ -40,7 +40,7 @@ import { CompetitionCard } from "@/components/competition-card";
 import { ImmigrationCard } from "@/components/immigration-card";
 import { useToast } from "@/hooks/use-toast";
 import { MobilePageHeader } from "@/components/layout/mobile-page-header";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardFooter } from "@/components/ui/card";
 import { DesktopPageHeader } from "@/components/layout/desktop-page-header";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { revalidateAll } from "@/lib/revalidate";
@@ -83,7 +83,7 @@ function AdGrid({
           <div className="flex-grow">
             <JobCard job={ad} />
           </div>
-          <CardFooter className="p-4 flex gap-2">
+          <CardFooter className="p-4 border-t flex gap-2">
             {showEditButton && (
               <Button
                 asChild
@@ -133,7 +133,7 @@ function ImmigrationGrid({
           <div className="flex-grow">
             <ImmigrationCard post={post} />
           </div>
-          <CardFooter className="p-4 flex gap-2">
+          <CardFooter className="p-4 border-t flex gap-2">
             <Button
               asChild
               variant="outline"
@@ -182,7 +182,7 @@ function CompetitionGrid({
           <div className="flex-grow">
             <CompetitionCard competition={comp} />
           </div>
-          <CardFooter className="p-4 flex gap-2">
+          <CardFooter className="p-4 border-t flex gap-2">
             <Button
               asChild
               variant="outline"
@@ -420,69 +420,61 @@ export default function MyAdsPage() {
               </TabsTrigger>
             </TabsList>
 
-            <Card>
-              <CardContent className="pt-6">
-                
-                <TabsContent value="jobs" className="mt-0 space-y-6">
-                  {loadingMap.jobs && jobOffers.length === 0 ? (
-                     <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
-                  ) : (
-                    <>
-                      <AdGrid ads={jobOffers} onAdDelete={(id) => handleDeleteTrigger(id, "ad", "seeking_worker")} showEditButton={true} />
-                      <LoadMoreButton onClick={() => fetchAdminData('jobs', true)} loading={loadingMap.jobs} hasMore={hasMore.jobs} />
-                    </>
-                  )}
-                </TabsContent>
-
-                <TabsContent value="workers" className="mt-0 space-y-6">
-                  {loadingMap.workers && jobRequests.length === 0 ? (
-                     <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
-                  ) : (
-                    <>
-                      <AdGrid ads={jobRequests} onAdDelete={(id) => handleDeleteTrigger(id, "ad", "seeking_job")} showEditButton={false} />
-                      <LoadMoreButton onClick={() => fetchAdminData('workers', true)} loading={loadingMap.workers} hasMore={hasMore.workers} />
-                    </>
-                  )}
-                </TabsContent>
-
-                <TabsContent value="migration" className="mt-0 space-y-6">
-                  {loadingMap.immigration && immigrationPosts.length === 0 ? (
-                     <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
-                  ) : (
-                    <>
-                      <ImmigrationGrid posts={immigrationPosts} onAdDelete={(id) => handleDeleteTrigger(id, "immigration")} />
-                      <LoadMoreButton onClick={() => fetchAdminData('immigration', true)} loading={loadingMap.immigration} hasMore={hasMore.immigration} />
-                    </>
-                  )}
-                </TabsContent>
-
-                <TabsContent value="competitions" className="mt-0 space-y-6">
-                  {loadingMap.competitions && competitions.length === 0 ? (
-                     <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
-                  ) : (
-                    <>
-                      <CompetitionGrid competitions={competitions} onAdDelete={(id) => handleDeleteTrigger(id, "competition")} />
-                      <LoadMoreButton onClick={() => fetchAdminData('competitions', true)} loading={loadingMap.competitions} hasMore={hasMore.competitions} />
-                    </>
-                  )}
-                </TabsContent>
-
-              </CardContent>
-            </Card>
-          </Tabs>
-        ) : (
-          <Card>
-            <CardContent className="pt-6">
-              {loadingMap.userAds && jobRequests.length === 0 ? (
-                <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
+            <TabsContent value="jobs" className="mt-0 space-y-6">
+              {loadingMap.jobs && jobOffers.length === 0 ? (
+                 <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
               ) : (
                 <>
-                  <AdGrid ads={jobRequests} onAdDelete={(id) => handleDeleteTrigger(id, "ad", "seeking_job")} showEditButton={true} />
-                  <LoadMoreButton onClick={() => fetchUserAds(true)} loading={loadingMap.userAds} hasMore={hasMore.userAds} />
+                  <AdGrid ads={jobOffers} onAdDelete={(id) => handleDeleteTrigger(id, "ad", "seeking_worker")} showEditButton={true} />
+                  <LoadMoreButton onClick={() => fetchAdminData('jobs', true)} loading={loadingMap.jobs} hasMore={hasMore.jobs} />
                 </>
               )}
-            </CardContent>
-          </Card>
+            </TabsContent>
+
+            <TabsContent value="workers" className="mt-0 space-y-6">
+              {loadingMap.workers && jobRequests.length === 0 ? (
+                 <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
+              ) : (
+                <>
+                  <AdGrid ads={jobRequests} onAdDelete={(id) => handleDeleteTrigger(id, "ad", "seeking_job")} showEditButton={false} />
+                  <LoadMoreButton onClick={() => fetchAdminData('workers', true)} loading={loadingMap.workers} hasMore={hasMore.workers} />
+                </>
+              )}
+            </TabsContent>
+
+            <TabsContent value="migration" className="mt-0 space-y-6">
+              {loadingMap.immigration && immigrationPosts.length === 0 ? (
+                 <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
+              ) : (
+                <>
+                  <ImmigrationGrid posts={immigrationPosts} onAdDelete={(id) => handleDeleteTrigger(id, "immigration")} />
+                  <LoadMoreButton onClick={() => fetchAdminData('immigration', true)} loading={loadingMap.immigration} hasMore={hasMore.immigration} />
+                </>
+              )}
+            </TabsContent>
+
+            <TabsContent value="competitions" className="mt-0 space-y-6">
+              {loadingMap.competitions && competitions.length === 0 ? (
+                 <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
+              ) : (
+                <>
+                  <CompetitionGrid competitions={competitions} onAdDelete={(id) => handleDeleteTrigger(id, "competition")} />
+                  <LoadMoreButton onClick={() => fetchAdminData('competitions', true)} loading={loadingMap.competitions} hasMore={hasMore.competitions} />
+                </>
+              )}
+            </TabsContent>
+          </Tabs>
+        ) : (
+          <>
+            {loadingMap.userAds && jobRequests.length === 0 ? (
+              <div className="flex justify-center p-8"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
+            ) : (
+              <>
+                <AdGrid ads={jobRequests} onAdDelete={(id) => handleDeleteTrigger(id, "ad", "seeking_job")} showEditButton={true} />
+                <LoadMoreButton onClick={() => fetchUserAds(true)} loading={loadingMap.userAds} hasMore={hasMore.userAds} />
+              </>
+            )}
+          </>
         )}
       </div>
 
@@ -504,4 +496,4 @@ export default function MyAdsPage() {
       </AlertDialog>
     </>
   );
-}
+  }
