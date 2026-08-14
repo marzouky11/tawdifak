@@ -14,7 +14,6 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { Loader2, UserPlus, Mail, Lock, User } from 'lucide-react';
-import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -116,9 +115,6 @@ export function SignupForm() {
 
   return (
     <>
-      <MobilePageHeader title="إنشاء حساب جديد">
-        <UserPlus className="h-5 w-5 text-primary" />
-      </MobilePageHeader>
       <div className="container mx-auto max-w-md pb-12">
         <Card className="shadow-lg">
           <CardHeader className="text-center md:hidden">
@@ -225,4 +221,4 @@ export function SignupForm() {
       </div>
     </>
   );
-              }
+}
