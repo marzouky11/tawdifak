@@ -19,7 +19,6 @@ import { getWorkers, deleteAd } from "@/lib/data";
 import type { Job, FirestoreCursor } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { MobilePageHeader } from "@/components/layout/mobile-page-header";
-import { Card, CardContent } from "@/components/ui/card";
 import { DesktopPageHeader } from "@/components/layout/desktop-page-header";
 import { revalidateAll } from "@/lib/revalidate";
 import { AdGrid, LoadMoreButton } from "@/components/admin/admin-ads-grids";
@@ -99,21 +98,17 @@ export default function AdminManageWorkersPage() {
         <FullPageLoader />
       ) : (
       <div className="flex-grow container mx-auto max-w-7xl px-4 pb-12">
-        <Card>
-          <CardContent className="pt-6">
-            <AdGrid
-              ads={workers}
-              onAdDelete={(id) => setAdToDelete(id)}
-              showEditButton={false}
-              emptyMessage="لا توجد إعلانات باحثين عن عمل منشورة بعد."
-            />
-            <LoadMoreButton
-              onClick={() => fetchWorkers(true)}
-              loading={loadingMore}
-              hasMore={hasMore}
-            />
-          </CardContent>
-        </Card>
+        <AdGrid
+          ads={workers}
+          onAdDelete={(id) => setAdToDelete(id)}
+          showEditButton={false}
+          emptyMessage="لا توجد إعلانات باحثين عن عمل منشورة بعد."
+        />
+        <LoadMoreButton
+          onClick={() => fetchWorkers(true)}
+          loading={loadingMore}
+          hasMore={hasMore}
+        />
       </div>
       )}
 
