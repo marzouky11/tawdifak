@@ -19,7 +19,6 @@ import { getJobOffers, deleteAd } from "@/lib/data";
 import type { Job, FirestoreCursor } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { MobilePageHeader } from "@/components/layout/mobile-page-header";
-import { Card, CardContent } from "@/components/ui/card";
 import { DesktopPageHeader } from "@/components/layout/desktop-page-header";
 import { revalidateAll } from "@/lib/revalidate";
 import { AdGrid, LoadMoreButton } from "@/components/admin/admin-ads-grids";
@@ -99,21 +98,17 @@ export default function AdminManageJobsPage() {
         <FullPageLoader />
       ) : (
       <div className="flex-grow container mx-auto max-w-7xl px-4 pb-12">
-        <Card>
-          <CardContent className="pt-6">
-            <AdGrid
-              ads={jobs}
-              onAdDelete={(id) => setAdToDelete(id)}
-              showEditButton={true}
-              emptyMessage="لا توجد إعلانات وظائف منشورة بعد."
-            />
-            <LoadMoreButton
-              onClick={() => fetchJobs(true)}
-              loading={loadingMore}
-              hasMore={hasMore}
-            />
-          </CardContent>
-        </Card>
+        <AdGrid
+          ads={jobs}
+          onAdDelete={(id) => setAdToDelete(id)}
+          showEditButton={true}
+          emptyMessage="لا توجد إعلانات وظائف منشورة بعد."
+        />
+        <LoadMoreButton
+          onClick={() => fetchJobs(true)}
+          loading={loadingMore}
+          hasMore={hasMore}
+        />
       </div>
       )}
 
@@ -138,4 +133,4 @@ export default function AdminManageJobsPage() {
       </AlertDialog>
     </>
   );
-}
+        }
