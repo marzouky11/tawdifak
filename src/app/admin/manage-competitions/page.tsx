@@ -19,7 +19,6 @@ import { getCompetitions, deleteCompetition } from "@/lib/data";
 import type { Competition, FirestoreCursor } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { MobilePageHeader } from "@/components/layout/mobile-page-header";
-import { Card, CardContent } from "@/components/ui/card";
 import { DesktopPageHeader } from "@/components/layout/desktop-page-header";
 import { revalidateAll } from "@/lib/revalidate";
 import { CompetitionGrid, LoadMoreButton } from "@/components/admin/admin-ads-grids";
@@ -99,16 +98,12 @@ export default function AdminManageCompetitionsPage() {
         <FullPageLoader />
       ) : (
       <div className="flex-grow container mx-auto max-w-7xl px-4 pb-12">
-        <Card>
-          <CardContent className="pt-6">
-            <CompetitionGrid competitions={competitions} onAdDelete={(id) => setCompToDelete(id)} />
-            <LoadMoreButton
-              onClick={() => fetchCompetitions(true)}
-              loading={loadingMore}
-              hasMore={hasMore}
-            />
-          </CardContent>
-        </Card>
+        <CompetitionGrid competitions={competitions} onAdDelete={(id) => setCompToDelete(id)} />
+        <LoadMoreButton
+          onClick={() => fetchCompetitions(true)}
+          loading={loadingMore}
+          hasMore={hasMore}
+        />
       </div>
       )}
 
@@ -133,4 +128,4 @@ export default function AdminManageCompetitionsPage() {
       </AlertDialog>
     </>
   );
-}
+    }
