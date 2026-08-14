@@ -19,7 +19,6 @@ import { getImmigrationPosts, deleteImmigrationPost } from "@/lib/data";
 import type { ImmigrationPost, FirestoreCursor } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { MobilePageHeader } from "@/components/layout/mobile-page-header";
-import { Card, CardContent } from "@/components/ui/card";
 import { DesktopPageHeader } from "@/components/layout/desktop-page-header";
 import { revalidateAll } from "@/lib/revalidate";
 import { ImmigrationGrid, LoadMoreButton } from "@/components/admin/admin-ads-grids";
@@ -99,16 +98,12 @@ export default function AdminManageImmigrationPage() {
         <FullPageLoader />
       ) : (
       <div className="flex-grow container mx-auto max-w-7xl px-4 pb-12">
-        <Card>
-          <CardContent className="pt-6">
-            <ImmigrationGrid posts={posts} onAdDelete={(id) => setPostToDelete(id)} />
-            <LoadMoreButton
-              onClick={() => fetchPosts(true)}
-              loading={loadingMore}
-              hasMore={hasMore}
-            />
-          </CardContent>
-        </Card>
+        <ImmigrationGrid posts={posts} onAdDelete={(id) => setPostToDelete(id)} />
+        <LoadMoreButton
+          onClick={() => fetchPosts(true)}
+          loading={loadingMore}
+          hasMore={hasMore}
+        />
       </div>
       )}
 
