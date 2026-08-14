@@ -13,7 +13,6 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { Loader2, LogIn, Mail, Lock } from 'lucide-react';
-import { MobilePageHeader } from '@/components/layout/mobile-page-header';
 import { Separator } from '@/components/ui/separator';
 import { TurnstileWidget, type TurnstileWidgetRef } from '@/components/turnstile-widget';
 import { verifyTurnstileToken } from '@/lib/verify-turnstile-client';
@@ -78,9 +77,6 @@ description: 'يمكنك الآن إدارة حسابك وإعلاناتك.',
 
   return (
     <>
-      <MobilePageHeader title="تسجيل الدخول">
-        <LogIn className="h-5 w-5 text-primary" />
-      </MobilePageHeader>
       <div className="container mx-auto max-w-md pb-12">
         <Card className="shadow-lg">
           <CardHeader className="text-center md:hidden">
@@ -148,4 +144,4 @@ description: 'يمكنك الآن إدارة حسابك وإعلاناتك.',
       </div>
     </>
   );
-}
+    }
