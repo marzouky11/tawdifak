@@ -43,32 +43,14 @@ interface JobPostingJsonLd {
   employmentType: string;
 }
 
-export async function generateMetadata({ params }: ImmigrationDetailPageProps): Promise<Metadata> {
-  const { id } = await params;
-  const post = await getCachedImmigrationById(id);
-  const baseUrl = SITE_URL;
-  const siteThumbnail = 'https://i.postimg.cc/MH0BfvFB/og-image.jpg';
-  
-  if (!post) {
-    return {
-      title: 'فرصة هجرة غير موجودة',
-      description: 'لم نتمكن من العثور على فرصة الهجرة التي تبحث عنها.',
-      robots: 'index, follow',
-      openGraph: { 
-        images: [{ url: siteThumbnail }],
-        title: 'فرصة هجرة غير موجودة',
-        description: 'لم نتمكن من العثور على فرصة الهجرة التي تبحث عنها.',
-      },
-    };
-  }
-
-  const programDetails = getProgramTypeDetails(post.programType);
-  const metaTitle = post.title;
-  const metaDescription = (post.description || `فرصة هجرة إلى ${post.targetCountry} في مجال ${programDetails.label}`).substring(0, 160);
-  const canonicalUrl = `${baseUrl}/immigration/${post.id}`;
+// Builds the JobPosting structured-data object for a given immigration post.
+// Shared with the page component, which renders it as a real
+// <script type="application/ld+json"> tag (Next.js's `other` metadata field
+// only emits <meta> tags, so JSON-LD must never be passed through `other` —
+// it would silently fail to be recognized by Google as structured data).
+function buildImmigrationJsonLd(post: NonNullable<Awaited<ReturnType<typeof getCachedImmigrationById>>>, baseUrl: string, metaTitle: string, metaDescription: string): JobPostingJsonLd {
   const createdAtDate = post.createdAt?.toDate ? post.createdAt.toDate() : new Date();
 
-  // Simplified and valid Structured Data
   const jobPostingJsonLd: JobPostingJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'JobPosting',
@@ -99,6 +81,34 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
       jobPostingJsonLd.validThrough = expiryDate.toISOString();
   }
 
+  return jobPostingJsonLd;
+}
+
+export async function generateMetadata({ params }: ImmigrationDetailPageProps): Promise<Metadata> {
+  const { id } = await params;
+  const post = await getCachedImmigrationById(id);
+  const baseUrl = SITE_URL;
+  const siteThumbnail = 'https://i.postimg.cc/MH0BfvFB/og-image.jpg';
+  
+  if (!post) {
+    return {
+      title: 'فرصة هجرة غير موجودة',
+      description: 'لم نتمكن من العثور على فرصة الهجرة التي تبحث عنها.',
+      robots: 'index, follow',
+      openGraph: { 
+        images: [{ url: siteThumbnail }],
+        title: 'فرصة هجرة غير موجودة',
+        description: 'لم نتمكن من العثور على فرصة الهجرة التي تبحث عنها.',
+      },
+    };
+  }
+
+  const programDetails = getProgramTypeDetails(post.programType);
+  const metaTitle = post.title;
+  const metaDescription = (post.description || `فرصة هجرة إلى ${post.targetCountry} في مجال ${programDetails.label}`).substring(0, 160);
+  const canonicalUrl = `${baseUrl}/immigration/${post.id}`;
+  const createdAtDate = post.createdAt?.toDate ? post.createdAt.toDate() : new Date();
+
   return {
     title: metaTitle,
     description: metaDescription,
@@ -121,9 +131,6 @@ export async function generateMetadata({ params }: ImmigrationDetailPageProps): 
         description: metaDescription,
         images: [siteThumbnail],
     },
-    other: {
-        'application/ld+json': JSON.stringify(jobPostingJsonLd, null, 2)
-    }
   };
 }
 
@@ -135,9 +142,20 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
     if (!post) {
         notFound();
     }
-    
+
+    const programDetails = getProgramTypeDetails(post.programType);
+    const metaDescription = (post.description || `فرصة هجرة إلى ${post.targetCountry} في مجال ${programDetails.label}`).substring(0, 160);
+    const jobPostingJsonLd = buildImmigrationJsonLd(post, SITE_URL, post.title, metaDescription);
+
     return (
         <>
+            {/* Structured data for rich results. Rendered here as a real <script>
+                tag — NOT via the metadata `other` field, which only produces
+                <meta> tags and would be invisible to Google. */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jobPostingJsonLd) }}
+            />
             <MobilePageHeader title="فرصة هجرة">
                 <Plane className="h-5 w-5 text-primary" />
             </MobilePageHeader>
@@ -162,3 +180,4 @@ export default async function ImmigrationDetailPage({ params }: ImmigrationDetai
         </>
     );
 }   
+      
