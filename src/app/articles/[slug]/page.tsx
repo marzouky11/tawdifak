@@ -1,4 +1,3 @@
-ز
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { getCachedArticleBySlug, getArticles } from '@/lib/data';
@@ -300,4 +299,5 @@ export default async function ArticlePage({ params }: Props) {
 export async function generateStaticParams() {
   const { data } = await getArticles({ limit: 24 });
   return data.map(article => ({ slug: article.slug }));
-      }
+    }
+    
