@@ -59,34 +59,20 @@ interface JobPostingJsonLd {
   };
 }
 
-export async function generateMetadata({ params }: JobDetailPageProps): Promise<Metadata> {
-  const { id } = await params;
-  const job = await getCachedJobById(id);
-  const baseUrl = SITE_URL;
-  const siteThumbnail = 'https://i.postimg.cc/MH0BfvFB/og-image.jpg';
-  
-  if (!job) {
-    return {
-      title: 'الإعلان غير موجود',
-      description: 'لم نتمكن من العثور على الإعلان الذي تبحث عنه.',
-      openGraph: { images: [{ url: siteThumbnail }] },
-      twitter: { images: [siteThumbnail] }
-    };
-  }
-  
-  const jobTitle = job.title || 'إعلان وظيفة';
-  const jobCity = job.city || 'مدينة غير محددة';
-  const jobCountry = job.country || 'دولة غير محددة';
-  const metaDescription = (job.description || `${jobTitle} في ${jobCity}, ${jobCountry}.`).substring(0, 160);
-  const createdAtDate = (job.createdAt && typeof job.createdAt.toDate === 'function') 
-    ? job.createdAt.toDate() 
+// Builds the JobPosting structured-data object for a given job. Shared by
+// the page component, which renders it as a real <script type="application/ld+json">
+// tag (Next.js's `other` metadata field only emits <meta> tags, so JSON-LD
+// must never be passed through `other` — it would silently fail to be
+// recognized by Google as structured data).
+function buildJobPostingJsonLd(job: Job, baseUrl: string, metaDescription: string): JobPostingJsonLd {
+  const createdAtDate = (job.createdAt && typeof job.createdAt.toDate === 'function')
+    ? job.createdAt.toDate()
     : new Date();
 
-  // Construct simplified and valid structured data
   const jobPostingJsonLd: JobPostingJsonLd = {
       '@context': 'https://schema.org',
       '@type': 'JobPosting',
-      title: jobTitle,
+      title: job.title || 'إعلان وظيفة',
       description: metaDescription,
       datePosted: createdAtDate.toISOString(),
       hiringOrganization: {
@@ -115,12 +101,38 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
   if (job.workType && workTypeMapping[job.workType]) {
       jobPostingJsonLd.employmentType = workTypeMapping[job.workType];
   }
-  
+
   const expiryDate = new Date(createdAtDate);
   expiryDate.setFullYear(expiryDate.getFullYear() + 1); // Set expiry to 1 year from posting
   jobPostingJsonLd.validThrough = expiryDate.toISOString();
 
+  return jobPostingJsonLd;
+}
 
+function getJobMetaDescription(job: Job): string {
+  const jobTitle = job.title || 'إعلان وظيفة';
+  const jobCity = job.city || 'مدينة غير محددة';
+  const jobCountry = job.country || 'دولة غير محددة';
+  return (job.description || `${jobTitle} في ${jobCity}, ${jobCountry}.`).substring(0, 160);
+}
+
+export async function generateMetadata({ params }: JobDetailPageProps): Promise<Metadata> {
+  const { id } = await params;
+  const job = await getCachedJobById(id);
+  const baseUrl = SITE_URL;
+  const siteThumbnail = 'https://i.postimg.cc/MH0BfvFB/og-image.jpg';
+  
+  if (!job) {
+    return {
+      title: 'الإعلان غير موجود',
+      description: 'لم نتمكن من العثور على الإعلان الذي تبحث عنه.',
+      openGraph: { images: [{ url: siteThumbnail }] },
+      twitter: { images: [siteThumbnail] }
+    };
+  }
+  
+  const jobTitle = job.title || 'إعلان وظيفة';
+  const metaDescription = getJobMetaDescription(job);
   const canonicalUrl = `${baseUrl}/jobs/${job.id}`;
 
   return {
@@ -144,9 +156,6 @@ export async function generateMetadata({ params }: JobDetailPageProps): Promise<
         description: metaDescription,
         images: [siteThumbnail],
     },
-    other: {
-        'application/ld+json': JSON.stringify(jobPostingJsonLd, null, 2)
-    }
   };
 }
 
@@ -158,8 +167,17 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
         notFound();
     }
 
+    const jobPostingJsonLd = buildJobPostingJsonLd(job, SITE_URL, getJobMetaDescription(job));
+
     return (
         <>
+            {/* Structured data for Google Jobs / rich results. Rendered here as a
+                real <script> tag — NOT via the metadata `other` field, which only
+                produces <meta> tags and would be invisible to Google. */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jobPostingJsonLd) }}
+            />
             {/* Common Headers for both mobile and desktop */}
             <MobilePageHeader title="تفاصيل عرض العمل">
                 <Briefcase className="h-5 w-5 text-primary" />
@@ -185,3 +203,4 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
         </>
     );
 }
+  
