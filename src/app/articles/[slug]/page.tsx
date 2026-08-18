@@ -1,3 +1,4 @@
+ز
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { getCachedArticleBySlug, getArticles } from '@/lib/data';
@@ -39,43 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  let articleDate: Date;
-
-  if (article.createdAt && typeof article.createdAt === 'object' && 'toDate' in article.createdAt) {
-    articleDate = article.createdAt.toDate();
-  } else if (typeof article.createdAt === 'string') {
-    articleDate = new Date(article.createdAt);
-  } else if (article.date) {
-    articleDate = new Date(article.date);
-  } else {
-    articleDate = new Date();
-  }
-
-  const articleJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': `${baseUrl}/articles/${article.slug}`,
-    },
-    headline: article.title,
-    description: article.summary,
-    image: article.imageUrl,
-    author: {
-      '@type': 'Person',
-      name: article.author,
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'توظيفك',
-      logo: {
-        '@type': 'ImageObject',
-        url: siteThumbnail,
-      },
-    },
-    datePublished: articleDate.toISOString(),
-    dateModified: articleDate.toISOString(),
-  };
+  const articleDate = getArticleDate(article);
 
   return {
     title: article.title,
@@ -101,9 +66,56 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: article.summary,
       images: [article.imageUrl],
     },
-    other: {
-      'application/ld+json': JSON.stringify(articleJsonLd),
+  };
+}
+
+// Resolves the article's publish date across the various shapes it can take
+// (Firestore Timestamp, ISO string, or a plain `date` fallback field).
+function getArticleDate(article: Article): Date {
+  if (article.createdAt && typeof article.createdAt === 'object' && 'toDate' in article.createdAt) {
+    return article.createdAt.toDate();
+  }
+  if (typeof article.createdAt === 'string') {
+    return new Date(article.createdAt);
+  }
+  if (article.date) {
+    return new Date(article.date);
+  }
+  return new Date();
+}
+
+// Builds the Article structured-data object. Rendered by the page component
+// as a real <script type="application/ld+json"> tag — NOT via the metadata
+// `other` field, which only produces <meta> tags and would be invisible to
+// Google as structured data.
+function buildArticleJsonLd(article: Article, baseUrl: string) {
+  const articleDate = getArticleDate(article);
+  const siteThumbnail = 'https://i.postimg.cc/MH0BfvFB/og-image.jpg';
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${baseUrl}/articles/${article.slug}`,
     },
+    headline: article.title,
+    description: article.summary,
+    image: article.imageUrl,
+    author: {
+      '@type': 'Person',
+      name: article.author,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'توظيفك',
+      logo: {
+        '@type': 'ImageObject',
+        url: siteThumbnail,
+      },
+    },
+    datePublished: articleDate.toISOString(),
+    dateModified: articleDate.toISOString(),
   };
 }
 
@@ -210,9 +222,17 @@ export default async function ArticlePage({ params }: Props) {
 
   const { data } = await getArticles({ limit: 4 });
   const relatedArticles = data.filter(a => a.slug !== article.slug).slice(0, 3);
+  const articleJsonLd = buildArticleJsonLd(article, SITE_URL);
 
   return (
     <>
+      {/* Structured data for rich results. Rendered here as a real <script>
+          tag — NOT via the metadata `other` field, which only produces
+          <meta> tags and would be invisible to Google. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <MobilePageHeader title="مقالات">
         <Newspaper className="h-5 w-5 text-primary" />
       </MobilePageHeader>
@@ -280,4 +300,4 @@ export default async function ArticlePage({ params }: Props) {
 export async function generateStaticParams() {
   const { data } = await getArticles({ limit: 24 });
   return data.map(article => ({ slug: article.slug }));
-          }
+      }
