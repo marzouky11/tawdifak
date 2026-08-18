@@ -43,27 +43,14 @@ interface JobPostingJsonLd {
   employmentType: string;
 }
 
-export async function generateMetadata({ params }: CompetitionDetailPageProps): Promise<Metadata> {
-  const { id } = await params;
-  const competition = await getCachedCompetitionById(id);
-  const baseUrl = SITE_URL;
-  const siteThumbnail = 'https://i.postimg.cc/MH0BfvFB/og-image.jpg';
-  
-  if (!competition) {
-    return {
-      title: 'المباراة غير موجودة',
-      description: 'لم نتمكن من العثور على المباراة التي تبحث عنها.',
-      openGraph: { images: [{ url: siteThumbnail }] },
-      twitter: { images: [siteThumbnail] }
-    };
-  }
-
-  const metaTitle = competition.title || 'مباراة عمومية';
-  const metaDescription = (competition.description || `مباراة منظمة من طرف ${competition.organizer}.`).substring(0, 160);
-  const canonicalUrl = `${baseUrl}/competitions/${competition.id}`;
+// Builds the JobPosting structured-data object for a given competition.
+// Shared with the page component, which renders it as a real
+// <script type="application/ld+json"> tag (Next.js's `other` metadata field
+// only emits <meta> tags, so JSON-LD must never be passed through `other` —
+// it would silently fail to be recognized by Google as structured data).
+function buildCompetitionJsonLd(competition: NonNullable<Awaited<ReturnType<typeof getCachedCompetitionById>>>, baseUrl: string, metaTitle: string, metaDescription: string): JobPostingJsonLd {
   const createdAtDate = competition.createdAt?.toDate ? competition.createdAt.toDate() : new Date();
 
-  // Simplified and valid Structured Data
   const jobPostingJsonLd: JobPostingJsonLd = {
       '@context': 'https://schema.org',
       '@type': 'JobPosting',
@@ -85,7 +72,7 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
       },
       employmentType: "FULL_TIME",
   };
-  
+
   if (competition.deadline) {
     try {
         const deadlineDate = new Date(competition.deadline.split(' ')[0]);
@@ -95,6 +82,27 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
     } catch(e) { /* ignore date parsing errors */ }
   }
 
+  return jobPostingJsonLd;
+}
+
+export async function generateMetadata({ params }: CompetitionDetailPageProps): Promise<Metadata> {
+  const { id } = await params;
+  const competition = await getCachedCompetitionById(id);
+  const baseUrl = SITE_URL;
+  const siteThumbnail = 'https://i.postimg.cc/MH0BfvFB/og-image.jpg';
+  
+  if (!competition) {
+    return {
+      title: 'المباراة غير موجودة',
+      description: 'لم نتمكن من العثور على المباراة التي تبحث عنها.',
+      openGraph: { images: [{ url: siteThumbnail }] },
+      twitter: { images: [siteThumbnail] }
+    };
+  }
+
+  const metaTitle = competition.title || 'مباراة عمومية';
+  const metaDescription = (competition.description || `مباراة منظمة من طرف ${competition.organizer}.`).substring(0, 160);
+  const canonicalUrl = `${baseUrl}/competitions/${competition.id}`;
 
   return {
     title: metaTitle,
@@ -117,9 +125,6 @@ export async function generateMetadata({ params }: CompetitionDetailPageProps): 
         description: metaDescription,
         images: [siteThumbnail],
     },
-    other: {
-        'application/ld+json': JSON.stringify(jobPostingJsonLd, null, 2)
-    }
   };
 }
 
@@ -130,9 +135,20 @@ export default async function CompetitionDetailPage({ params }: CompetitionDetai
     if (!competition) {
         notFound();
     }
-    
+
+    const metaTitle = competition.title || 'مباراة عمومية';
+    const metaDescription = (competition.description || `مباراة منظمة من طرف ${competition.organizer}.`).substring(0, 160);
+    const jobPostingJsonLd = buildCompetitionJsonLd(competition, SITE_URL, metaTitle, metaDescription);
+
     return (
         <>
+            {/* Structured data for rich results. Rendered here as a real <script>
+                tag — NOT via the metadata `other` field, which only produces
+                <meta> tags and would be invisible to Google. */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jobPostingJsonLd) }}
+            />
             <MobilePageHeader title="تفاصيل المباراة">
                 <Landmark className="h-5 w-5 text-primary" />
             </MobilePageHeader>
