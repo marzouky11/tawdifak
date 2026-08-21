@@ -160,7 +160,7 @@ export function JobMobileDetails({ job }: JobMobileDetailsProps) {
                         <div className="grid grid-cols-2 gap-3">
                             <InfoItem icon={MapPin} label="الموقع" value={`${job.country}, ${job.city}`} color={categoryColor} />
                             <InfoItem icon={Wallet} label="الأجر" value={job.salary ? job.salary : 'عند الطلب'} color={categoryColor} />
-                            {categoryName && <InfoItem icon={LayoutGrid} label="الفئة" value={categoryName} color={categoryColor} />}
+                            {categoryName && <InfoItem icon={LayoutGrid} label="مجال الوظيفة" value={categoryName} color={categoryColor} />}
                             {translatedWorkType && <InfoItem icon={Clock} label="نوع الدوام" value={translatedWorkType} color={categoryColor} />}
                         {translatedContractType && <InfoItem icon={FileSignature} label="نوع العقد" value={translatedContractType} color={categoryColor} />}
                             {job.companyName && <InfoItem icon={Building2} label="الشركة" value={job.companyName} color={categoryColor} />}
@@ -235,4 +235,5 @@ export function JobMobileDetails({ job }: JobMobileDetailsProps) {
             </div>
         </div>
     );
-}
+      }
+          
