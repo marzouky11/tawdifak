@@ -1,0 +1,18 @@
+# dependencies
+/node_modules
+
+# Next.js build output
+/.next/
+/out/
+
+# environment variables
+.env
+.env.local
+.env*.local
+
+# Firebase service account key (used only by scripts/migrate-ads-collection.js)
+serviceAccountKey.json
+
+# misc
+.DS_Store
+*.log
