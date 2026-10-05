@@ -33,10 +33,10 @@ export function HomePageFilters() {
 
   return (
     <form onSubmit={handleSearch} className="flex gap-2 items-center">
-      <div className="relative w-full flex-grow">
+      <div className="relative basis-[70%] min-w-0">
         <Input
           placeholder="ابحث عن وظيفة أو فرصة الهجرة..."
-          className="h-14 text-base rounded-xl pl-4 pr-16 border-2 bg-background shadow-inner focus-visible:ring-primary/50"
+          className="h-14 w-full text-base rounded-xl pl-4 pr-16 border-2 bg-background shadow-inner focus-visible:ring-primary/50 truncate"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -47,15 +47,15 @@ export function HomePageFilters() {
         </div>
       </div>
       <Select value={scope} onValueChange={setScope}>
-        <SelectTrigger className="h-14 w-auto shrink-0 min-w-[9rem] md:min-w-[13rem] gap-2 whitespace-nowrap rounded-xl border-2 bg-background shadow-inner text-base [&>span]:whitespace-nowrap [&>span]:line-clamp-none">
+        <SelectTrigger className="h-14 basis-[30%] min-w-0 w-auto gap-2 whitespace-nowrap rounded-xl border-2 bg-background shadow-inner text-base [&>span]:block [&>span]:min-w-0 [&>span]:flex-1 [&>span]:overflow-hidden [&>span]:line-clamp-none">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
           {SEARCH_SCOPES.map(({ value, label, icon: Icon }) => (
             <SelectItem key={value} value={value}>
-              <span className="flex items-center gap-2 whitespace-nowrap">
-                <Icon className="h-4 w-4 text-primary" />
-                {label}
+              <span className="flex items-center gap-2 whitespace-nowrap min-w-0">
+                <Icon className="h-4 w-4 shrink-0 text-primary" />
+                <span className="truncate">{label}</span>
               </span>
             </SelectItem>
           ))}
@@ -63,4 +63,4 @@ export function HomePageFilters() {
       </Select>
     </form>
   );
-}
+              }
