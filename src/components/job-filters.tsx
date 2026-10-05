@@ -30,7 +30,7 @@ export function JobFilters() {
       <div className="relative w-full flex-grow">
         <Input
           placeholder="ابحث بالمنصب، المدينة، الدولة، أو أي كلمة مفتاحية..."
-          className="h-14 text-base rounded-xl pl-4 pr-16 border-2 bg-background shadow-inner focus-visible:ring-primary/50"
+          className="h-14 text-base rounded-xl pl-4 pr-16 border-2 bg-background shadow-inner"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -43,4 +43,4 @@ export function JobFilters() {
     </form>
   );
       }
-            
+
