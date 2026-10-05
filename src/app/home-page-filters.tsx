@@ -36,7 +36,7 @@ export function HomePageFilters() {
       <div className="relative basis-[60%] md:basis-[85%] min-w-0">
         <Input
           placeholder="ابحث عن وظيفة أو فرصة الهجرة..."
-          className="h-14 w-full text-base rounded-xl pl-4 pr-16 border-2 bg-background shadow-inner focus-visible:ring-primary/50 truncate"
+          className="h-14 w-full text-base rounded-xl pl-4 pr-16 border-2 bg-background shadow-inner truncate"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
