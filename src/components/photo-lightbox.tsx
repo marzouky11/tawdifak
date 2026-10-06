@@ -35,7 +35,7 @@ export function PhotoLightbox({ photoURL, name, children, className }: PhotoLigh
         {children}
       </button>
       <DialogContent
-        className="max-w-none w-screen h-screen sm:h-screen bg-transparent border-0 shadow-none p-0 rounded-none flex items-center justify-center [&>button]:h-10 [&>button]:w-10 [&>button]:flex [&>button]:items-center [&>button]:justify-center [&>button]:bg-black/50 [&>button]:rounded-full [&>button]:text-white [&>button]:opacity-100 [&>button]:hover:bg-black/70 [&>button]:top-[calc(1rem+env(safe-area-inset-top,0px))] [&>button]:right-[calc(1rem+env(safe-area-inset-right,0px))]"
+        className="max-w-none left-0 top-0 translate-x-0 translate-y-0 w-screen h-[100dvh] sm:h-[100dvh] data-[state=open]:slide-in-from-left-0 data-[state=open]:slide-in-from-top-0 data-[state=closed]:slide-out-to-left-0 data-[state=closed]:slide-out-to-top-0 bg-transparent border-0 shadow-none p-0 rounded-none flex items-center justify-center [&>button]:h-10 [&>button]:w-10 [&>button]:flex [&>button]:items-center [&>button]:justify-center [&>button]:bg-black/50 [&>button]:rounded-full [&>button]:text-white [&>button]:opacity-100 [&>button]:hover:bg-black/70 [&>button]:top-[calc(1rem+env(safe-area-inset-top,0px))] [&>button]:right-[calc(1rem+env(safe-area-inset-right,0px))]"
       >
         <DialogTitle className="sr-only">{`الصورة الشخصية${name ? ` لـ ${name}` : ''}`}</DialogTitle>
         {/* Backdrop area: clicking it closes the viewer, like WhatsApp/Facebook */}
