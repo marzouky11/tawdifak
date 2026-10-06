@@ -80,7 +80,7 @@ const MobileFooter = () => {
             ))}
             <FooterLinkItem href="/add-testimonial" icon={MessageSquarePlus} label="إضافة رأي" />
             <a
-              href="https://www.instagram.com/tawdifak?igsh=MW9wcG5vdzJzZXpjMw=="
+              href="https://www.instagram.com/tawdifak_com?stkn=MWdxajIwY2N4bDAyOA=="
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-between p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
@@ -182,7 +182,7 @@ const DesktopFooter = () => {
               </li>
               <li>
                 <FooterColumnLink
-                  href="https://www.instagram.com/tawdifak?igsh=MW9wcG5vdzJzZXpjMw=="
+                  href="https://www.instagram.com/tawdifak_com?stkn=MWdxajIwY2N4bDAyOA=="
                   label="تابعنا على إنستغرام"
                   external
                 />
@@ -215,7 +215,7 @@ const DesktopFooter = () => {
             &copy; توظيفك. جميع الحقوق محفوظة {new Date().getFullYear()}
           </p>
           <a
-            href="https://www.instagram.com/tawdifak?igsh=MW9wcG5vdzJzZXpjMw=="
+            href="https://www.instagram.com/tawdifak_com?stkn=MWdxajIwY2N4bDAyOA=="
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center h-9 w-9 rounded-full border border-gray-200 dark:border-secondary-foreground/20 text-gray-400 dark:text-gray-500 hover:text-primary hover:border-primary/30 transition-colors"
@@ -236,4 +236,4 @@ export function Footer() {
       <DesktopFooter />
     </>
   );
-}
+                  }
