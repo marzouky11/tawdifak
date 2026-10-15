@@ -199,8 +199,8 @@ export default async function HomePage() {
             iconColor="#0D47A1"
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {data.jobOffers.map((job, index) => (
-                <div key={job.id} className={cn(index >= 4 && 'hidden sm:block')}>
+              {data.jobOffers.map((job) => (
+                <div key={job.id}>
                   <JobCard job={job} />
                 </div>
               ))}
@@ -218,8 +218,8 @@ export default async function HomePage() {
                 iconColor="#0ea5e9"
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {data.immigrationPosts.map((post, index) => (
-                    <div key={post.id} className={cn(index >= 4 && 'hidden sm:block')}>
+                  {data.immigrationPosts.map((post) => (
+                    <div key={post.id}>
                       <ImmigrationCard post={post} />
                     </div>
                   ))}
@@ -281,4 +281,5 @@ export default async function HomePage() {
       </div>
     </>
   );
-  }
+}
+    
