@@ -108,12 +108,12 @@ export default function AdminReportsPage() {
       {authLoading || (loading && reports.length === 0) ? (
         <FullPageLoader />
       ) : (
-      <div className="container mx-auto max-w-4xl px-4 pb-12">
+      <div className="container mx-auto max-w-6xl px-4 pb-12">
          {reports.length > 0 ? (
             <>
-              <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {reports.map((report) => (
-                <Card key={report.id}>
+                <Card key={report.id} className="flex flex-col h-full">
                     <CardHeader>
                         <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
                             <div>
@@ -127,7 +127,7 @@ export default function AdminReportsPage() {
                             <Badge variant="secondary" className="shrink-0">{formatDate(report.createdAt)}</Badge>
                         </div>
                     </CardHeader>
-                    <CardContent className="pt-0 space-y-2">
+                    <CardContent className="pt-0 space-y-2 flex-grow">
                         <p><strong>السبب:</strong> {report.reason}</p>
                         {report.details && <p className="whitespace-pre-wrap"><strong>التفاصيل:</strong> {report.details}</p>}
                     </CardContent>
@@ -174,4 +174,5 @@ export default function AdminReportsPage() {
       </AlertDialog>
     </>
   );
-}
+          }
+    
